@@ -3,6 +3,8 @@ package project;
 import java.util.*;
 
 public class TrainModel {
+    private static float POWER; // key input
+    private static float VELOCITY; // key output
     private static float AUTHORITY; // in meters
     private static float LENGTH;
     private static LinkedList<TrainCar> CARS = new LinkedList<>();
@@ -12,6 +14,7 @@ public class TrainModel {
     private final float CAR_LENGTH = 32.2f; // in meters
     private final float CAR_HEIGHT = 3.42f; // in meters
     private final float CAR_WIDTH = 2.65f; // in meters 
+    private static Client client;
 
     public TrainModel() {
         AUTHORITY = 30.5f;
@@ -51,4 +54,14 @@ public class TrainModel {
     public int getCrewCount() {
         return CREW_COUNT;
     }
+
+    public static void main(String[] args) {
+        client = new Client();
+        client.send("key", "value");
+        System.out.println("key: "+client.receive("key"));
+    }
+
+
 }
+
+
