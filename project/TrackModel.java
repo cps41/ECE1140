@@ -1,6 +1,8 @@
 package project;
 
-public class TrackModel 
+import javax.swing.ListModel;
+
+public class TrackModel
 {
 	//set for blue - must still extend for green and red line
 	
@@ -32,7 +34,14 @@ public class TrackModel
 	public TrackModel()
 	{
 		//initialize for blue line
+		
 		switchPosition = new boolean[1];
+		
+		int[] blockLength = new int[15];
+		for(int i = 0; i < 15; i++)
+		{
+			blockLength[i] = 50;
+		}
 	}
 	
 	//details
@@ -61,12 +70,17 @@ public class TrackModel
 	{
 		return true;
 	}
-	/*
+	
+	public void setSwitchPosition(String line, int block, boolean position)
+	{
+		
+	}
+	
 	public boolean getCrossingStatus(String line, int section)
 	{
 		return false;
 	}
-	
+	/*
 	public boolean getStationStatus(String line, int block)
 	{
 		return false;

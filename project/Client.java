@@ -3,6 +3,7 @@ package project;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Arrays;
+import java.util.ArrayList;
 
 public class Client {
     private static final int PORTNUMBER = 0;
@@ -14,6 +15,27 @@ public class Client {
     {
     	TrackModel model = new TrackModel();
     	TrackModelLogin mainDisplay = new TrackModelLogin();
+    	
+    	while(true)
+    	{
+	    	//receive
+	    	ArrayList<ArrayList<Integer>> trains = (ArrayList<ArrayList<Integer>>) receive("trains");
+	    	boolean position = (boolean) receive("switchPosition");
+	    	boolean crossing = (boolean) receive("crossingStatus");
+	    	
+	    	model.setSpeed(trains.get(1).get(0));
+	    	model.setAuthority(trains.get(1).get(1));
+	    	
+	    	model.setSwitchPosition("Blue", 5, position);
+	    	
+	    	//send
+	    	send("speed", model.getSpeed());
+	    	send("authority", model.getAuthority());
+	    	
+	    	send("switchPosition", model.getSwitchPosition("Blue", 5));
+	    	send("crossingStatus", model.getCrossingStatus("Blue", 3));
+    	}
+    	
     	
     	/*
         send("key1", "value 1");
