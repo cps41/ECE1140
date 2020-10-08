@@ -7,6 +7,7 @@ public class TrackModel
 	private static int[] speedLimit;
 	private static int[] elevation;
 	private static boolean[] switchPosition;
+	//private static double[] beaconData;
 	
 	
 	public static void main(String[] args)
