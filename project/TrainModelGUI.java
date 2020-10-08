@@ -46,7 +46,7 @@ public class TrainModelGUI extends TrainModel {
 		System.out.println("Refreshing.....");
 		System.out.println("Authority: "+authority+", Power: "+power);
 		//create elements
-		frame = new JFrame();
+		frame.remove(panel);
 		panel = new JPanel();
 		
 		//configure frame
