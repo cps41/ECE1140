@@ -10,15 +10,19 @@ public class test {
     private static ServerInterface mini;    
     private static boolean connected = false;    
     private static TrainModel train = new TrainModel();
-    public static void main(String[] args) {               
-        send("key2", "value 2");        
-        send("key3", 500.0);        
-        int[] arrVal = new int[]{1, 2, 3};        
-        send("key4", arrVal);        
-        System.out.printf("Server %s = %s\n", "Authority", receive("Authority"));        
-        System.out.printf("Server %s = %s\n", "key2", receive("key2"));        
-        System.out.printf("Server %s = %s\n", "key3", receive("key3"));        
-        System.out.printf("Server %s = %s\n", "key4", Arrays.toString((int[]) receive("key4")));    
+    public static void main(String[] args) {        
+        int count = 0;
+        while(count<1001) {       
+            send("authority", 1023.0f);        
+            send("key3", 500.0);        
+            int[] arrVal = new int[]{1, 2, 3};        
+            send("key4", arrVal);        
+            System.out.printf("Server %s = %s\n", "Authority", receive("authority"));        
+            System.out.printf("Server %s = %s\n", "key2", receive("key2"));        
+            System.out.printf("Server %s = %s\n", "key3", receive("key3"));        
+            System.out.printf("Server %s = %s\n", "key4", Arrays.toString((int[]) receive("key4")));    
+            count++;
+        }
     }    
     static boolean send(String key, Object value) {        
         if (!connected) {            connectClient();        

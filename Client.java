@@ -1,27 +1,38 @@
 /* Needed on Client only */
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.Arrays;
+import javax.swing.*;
 import project.*;
 
 public class Client {    
     private static final int PORTNUMBER = 0;    
     private static final String cpuIP = "3.131.133.188";    
     private static ServerInterface mini;    
-    private static boolean connected = false;    
-    private static TrainModel train = new TrainModel();
-    public static void main(String[] args) {        
-        send("Authority", train.getAuthority());        
-        send("key2", "value 2");        
-        send("key3", 500.0);        
-        int[] arrVal = new int[]{1, 2, 3};        
-        send("key4", arrVal);        
+    private static boolean connected = false;
 
-        System.out.printf("Server %s = %s\n", "Authority", receive("Authority"));        
-        System.out.printf("Server %s = %s\n", "Authority", receive("Authority"));        
-        System.out.printf("Server %s = %s\n", "key2", receive("key2"));        
-        System.out.printf("Server %s = %s\n", "key3", receive("key3"));        
-        System.out.printf("Server %s = %s\n", "key4", Arrays.toString((int[]) receive("key4")));    
+    public static void main(String[] args) throws InterruptedException {
+        TrainModelGUI train = new TrainModelGUI();
+        send("power", TrainModel.POWER);
+        send("authority", TrainModel.AUTHORITY);
+
+        while(train.frame.isShowing()) {	 
+            System.out.println("Showing...");       
+	        //receive key inputs
+	        Object power = receive("power");
+            Object authority = receive("authority");
+            //send key outputs
+            if (authority == null) authority = 0.0f;
+            if (power == null) power = 0.0f;
+            send("authority", authority);
+            send("velocity", (float) power*2);
+            //set key inputs
+            train.refresh((float) authority, (float) power);
+        
+            //wait so screen is visible
+            Thread.sleep(1000);
+        }
+        send("authority", null);
+        send("velocity", null);
     }    
     static boolean send(String key, Object value) {        
         if (!connected) {            connectClient();        
@@ -57,7 +68,7 @@ public class Client {
             }        
         }    
     }    
-    static void call(String key, Object...argv) {        
+    /*static void call(String key, Object...argv) {        
         if (!connected) {            
             connectClient();        
         }        
@@ -79,5 +90,5 @@ public class Client {
             e.printStackTrace();            
             return null;        
         }    
-    }
+    }*/
 }
