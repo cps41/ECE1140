@@ -17,7 +17,8 @@ public class TrackModel
 	
 	//status
 	static boolean[] switchPosition;
-	//static boolean[] crossingStatus;  
+	//static boolean[] crossingStatus; 
+	//static boolean[] stationStatus;
 	static boolean[] trackStatus; //broken rail condition
 	
 	//data
@@ -36,14 +37,72 @@ public class TrackModel
 		switchPosition = new boolean[1];
 	}
 	
-	public void getSwitchPosition(String line, int block)//track only get switch status, not set switch
+	//details
+	public int getBlockLength(String line, int block)
+	{
+		return 50;
+	}
+	
+	public int getSpeedLimit(String line, int block)
+	{
+		return 50;
+	}
+	
+	public int getBlockGrade(String line, int block)
+	{
+		return 0;
+	}
+	
+	public int getCumulativeElevation(String line, int block)
+	{
+		return 0;
+	}
+	
+	//status
+	public boolean getSwitchPosition(String line, int block)
 	{
 		return true;
 	}
-	
-	public void getCrossingStatus(String line, int section)
+	/*
+	public boolean getCrossingStatus(String line, int section)
 	{
 		return false;
 	}
 	
+	public boolean getStationStatus(String line, int block)
+	{
+		return false;
+	}
+	*/
+	public void setTrackStatus(int newStatus) 
+	{
+		trackStatus = newStatus;
+	}
+	
+	public int getTrackStatus()
+	{
+		return trackStatus;
+	}
+	
+	
+	//passing data
+	public void setSpeed(int newSpeed)
+	{
+		speed = newSpeed;
+	}
+	
+	public int getSpeed()
+	{
+		return speed;
+	}
+	
+	public void setAuthority(int newAuthority)
+	{
+		authority = newAuthority;
+	}
+	
+	public int getAuthority()
+	{
+		return authority;
+	}
 }
