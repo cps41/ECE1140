@@ -19,7 +19,7 @@ public class TrackModel
 	static boolean[] switchPosition;
 	//static boolean[] crossingStatus; 
 	//static boolean[] stationStatus;
-	static boolean[] trackStatus; //broken rail condition
+	//static boolean[] trackStatus; //broken rail condition
 	
 	//data
 	//static double[] beaconData;
@@ -31,7 +31,6 @@ public class TrackModel
 	
 	public TrackModel()
 	{
-		TrackModelLogin mainDisplay = new TrackModelLogin;
 		//initialize for blue line
 		switchPosition = new boolean[1];
 	}
@@ -72,7 +71,7 @@ public class TrackModel
 	{
 		return false;
 	}
-	*/
+	
 	public void setTrackStatus(int newStatus) 
 	{
 		trackStatus = newStatus;
@@ -82,7 +81,7 @@ public class TrackModel
 	{
 		return trackStatus;
 	}
-	
+	*/
 	
 	//passing data
 	public void setSpeed(int newSpeed)
