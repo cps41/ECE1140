@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Font;
 
-public class TrackModelGUI 
+public class TrackModelGUI extends TrackModel
 {
 	private static JFrame frame;
 	private static JPanel panel;
