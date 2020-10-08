@@ -13,8 +13,9 @@ public class Client {
     public static void main(String[] args) 
     {
     	TrackModel model = new TrackModel();
+    	TrackModelLogin mainDisplay = new TrackModelLogin();
     	
-    	
+    	/*
         send("key1", "value 1");
         send("key2", "value 2");
         send("key3", 500.0);
@@ -24,6 +25,7 @@ public class Client {
         System.out.printf("Server %s = %s\n", "key2", receive("key2"));
         System.out.printf("Server %s = %s\n", "key3", receive("key3"));
         System.out.printf("Server %s = %s\n", "key4", Arrays.toString((int[]) receive("key4")));
+        */
     }
     
     static boolean send(String key, Object value) 
