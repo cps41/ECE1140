@@ -5,7 +5,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 
-public class TrackModelLogin 
+public class TrackModelLogin extends TrackModel
 {
 	private static JFrame frame;
 	private static JPanel panel;
