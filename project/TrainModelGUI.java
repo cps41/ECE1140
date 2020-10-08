@@ -4,28 +4,72 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class TrainModelGUI extends JPanel{
-    private GridBagConstraints c = new GridBagConstraints();
-    private Container panel;
-    private JLabel power;
-    private JLabel velocity;
 
-    public TrainModelGUI() {
-		power.setFont(new Font("Serif", Font.PLAIN, 35));
-		velocity.setFont(new Font("Serif", Font.PLAIN, 35));
-        panel.setLayout(new GridBagLayout());
+public class TrainModelGUI extends TrainModel {
 
-        c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridwidth = 1;
-        c.gridx = 0;
-        c.gridy = 0;
-        panel.add(power, c);
+	//declare elements
+	public static JFrame frame;
+	private static JPanel panel;
+	private static JLabel VelocityPanel;
+	private static JLabel AuthorityPanel;
+	private static JLabel PowerPanel;
+	
+	public TrainModelGUI() throws InterruptedException {
+		
+		//create elements
+		frame = new JFrame();
+		panel = new JPanel();
+		
+		//configure frame
+		frame.setSize(1200, 1000);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setTitle("Train Model");
+		frame.setVisible(true);
 
-        c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridwidth = 1;
-        c.gridx = 0;
-        c.gridy = 1;
-        panel.add(velocity, c);
-    }
-    
+		//configure panel
+		frame.add(panel, BorderLayout.CENTER);
+		panel.setLayout(null);
+		
+		//display key inputs
+		VelocityPanel = new JLabel("Train Velocity: " + super.VELOCITY);
+		VelocityPanel.setBounds(500, 100, 200, 100);
+		panel.add(VelocityPanel);
+		AuthorityPanel = new JLabel("Train Authority: " + super.AUTHORITY);
+		AuthorityPanel.setBounds(500,200,200,100);
+		panel.add(AuthorityPanel);
+		PowerPanel = new JLabel("Train PowerPanel: " + super.POWER);
+		PowerPanel.setBounds(500,300,200,100);
+		panel.add(PowerPanel);
+	}
+
+	public static void refresh(float authority, float power) {
+		System.out.println("Refreshing.....");
+		System.out.println("Authority: "+authority+", Power: "+power);
+		//create elements
+		frame = new JFrame();
+		panel = new JPanel();
+		
+		//configure frame
+		frame.setSize(1200, 1000);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setTitle("Train Model");
+		frame.setVisible(true);
+
+		//configure panel
+		frame.add(panel, BorderLayout.CENTER);
+		panel.setLayout(null);
+		panel.removeAll();
+		
+		//display key inputs
+		VelocityPanel = new JLabel("Train VelocityPanel: " + power*2);
+		VelocityPanel.setBounds(500, 100, 200, 100);
+		panel.add(VelocityPanel);
+		AuthorityPanel = new JLabel("Train AuthorityPanel: " + authority);
+		AuthorityPanel.setBounds(500,200,200,100);
+		panel.add(AuthorityPanel);
+		PowerPanel = new JLabel("Train PowerPanel Input: " + power);
+		PowerPanel.setBounds(500,300,200,100);
+		panel.add(PowerPanel);
+		panel.setVisible(true);
+	}
 }
