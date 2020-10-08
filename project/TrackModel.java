@@ -29,10 +29,9 @@ public class TrackModel
 	static int authority;
 	
 	
-	public static void main(String[] args)
+	public TrackModel()
 	{
-		TrackModelLogin loginDisplay = new TrackModelLogin(); //start GUI
-		
+		TrackModelLogin mainDisplay = new TrackModelLogin;
 		//initialize for blue line
 		switchPosition = new boolean[1];
 	}
