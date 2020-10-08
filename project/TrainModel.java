@@ -11,6 +11,7 @@ public class TrainModel {
     public final float CAR_LENGTH = 32.2f; // in meters
     public final float CAR_HEIGHT = 3.42f; // in meters
     public final float CAR_WIDTH = 2.65f; // in meters
+    public static boolean BREAKS = false;
 
     public static void setAuthority(float data) {
         AUTHORITY = data;
