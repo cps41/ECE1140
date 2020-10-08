@@ -16,6 +16,8 @@ public class Client {
         send("key3", 500.0);        
         int[] arrVal = new int[]{1, 2, 3};        
         send("key4", arrVal);        
+
+        System.out.printf("Server %s = %s\n", "Authority", receive("Authority"));        
         System.out.printf("Server %s = %s\n", "Authority", receive("Authority"));        
         System.out.printf("Server %s = %s\n", "key2", receive("key2"));        
         System.out.printf("Server %s = %s\n", "key3", receive("key3"));        

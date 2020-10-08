@@ -13,8 +13,7 @@ public class TrainModel {
     private static int PASSENGER_COUNT;
     private final float CAR_LENGTH = 32.2f; // in meters
     private final float CAR_HEIGHT = 3.42f; // in meters
-    private final float CAR_WIDTH = 2.65f; // in meters 
-    private static Client client;
+    private final float CAR_WIDTH = 2.65f; // in meters
 
     public TrainModel() {
         AUTHORITY = 30.5f;
@@ -56,9 +55,7 @@ public class TrainModel {
     }
 
     public static void main(String[] args) {
-        client = new Client();
-        client.send("key", "value");
-        System.out.println("key: "+client.receive("key"));
+        return;
     }
 
 
