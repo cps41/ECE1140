@@ -2,7 +2,12 @@ package project;
 
 public class TrackModel 
 {
+	private static int[] blockLength;
+	private static int[] blockGrade;
+	private static int[] speedLimit;
+	private static int[] elevation;
 	private static boolean[] switchPosition;
+	
 	
 	public static void main(String[] args)
 	{
@@ -10,7 +15,6 @@ public class TrackModel
 		
 		//initialize for blue line
 		switchPosition = new boolean[1];
-		///
 		
 	}
 	
