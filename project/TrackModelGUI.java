@@ -22,5 +22,22 @@ public class TrackModelGUI extends TrackModel
 		panel.setLayout(null);
 		frame.add(panel, BorderLayout.CENTER);
 		
+		JLabel speed = new JLabel("Speed: " + super.getSpeed());
+		speed.setBounds(100, 50, 100, 25);
+		panel.add(speed);
+		
+		JLabel authority = new JLabel("Authority: " + super.getAuthority());
+		authority.setBounds(100,100,100,25);
+		panel.add(authority);
+		
+		for(int i = 1; i <= 15; i++)
+		{
+			JLabel length = new JLabel("Block" + i + ":  Length:" + super.getBlockLength("Blue",i) + "   Speed Limit:" + super.getSpeedLimit("Blue",i)  + "   Grade:" + super.getBlockGrade("Blue",i));
+			length.setBounds(100, 125+25*i, 400, 25);
+			panel.add(length);
+		}
+		
+		panel.repaint();
+		
 	}
 }
