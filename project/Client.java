@@ -1,7 +1,7 @@
 /* Needed on Client only */
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.Arrays;
+import javax.swing.*;
 import project.*;
 
 public class Client {    
@@ -10,10 +10,17 @@ public class Client {
     private static ServerInterface mini;    
     private static boolean connected = false;    
     private static TrainModel train = new TrainModel();
+    private JFrame Window;
+    private TrainModelGUI guiPanel;
+    
+
+
     public static void main(String[] args) {        
-        send("Authority", train.getAuthority());  
-        System.out.printf("Server %s = %s\n", "Authority", receive("Authority"));        
-        System.out.printf("Server %s = %s\n", "test", receive("test"));   
+        while(receive("test") != null) {
+            send("Authority", train.getAuthority());  
+            System.out.printf("Server %s = %s\n", "Authority", receive("Authority"));        
+            System.out.printf("Server %s = %s\n", "test", receive("test"));  
+        } 
     }    
     static boolean send(String key, Object value) {        
         if (!connected) {            connectClient();        
