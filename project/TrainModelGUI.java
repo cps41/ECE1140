@@ -13,6 +13,7 @@ public class TrainModelGUI extends TrainModel {
 	private static JLabel VelocityPanel;
 	private static JLabel AuthorityPanel;
 	private static JLabel PowerPanel;
+	private static JLabel BreaksPanel;
 	
 	public TrainModelGUI() throws InterruptedException {
 		
@@ -37,12 +38,19 @@ public class TrainModelGUI extends TrainModel {
 		AuthorityPanel = new JLabel("Train Authority: " + super.AUTHORITY);
 		AuthorityPanel.setBounds(500,200,200,100);
 		panel.add(AuthorityPanel);
-		PowerPanel = new JLabel("Train PowerPanel: " + super.POWER);
+		PowerPanel = new JLabel("Train Power Input: " + super.POWER);
 		PowerPanel.setBounds(500,300,200,100);
 		panel.add(PowerPanel);
+
+		String status;
+		if (super.BREAKS) status = "on";
+		else status = "off";
+		BreaksPanel = new JLabel("Train Break Status: " + status);
+		BreaksPanel.setBounds(500,400,200,100);
+		panel.add(BreaksPanel);
 	}
 
-	public static void refresh(float authority, float power) {
+	public static void refresh(float authority, float power, boolean breaks) {
 		System.out.println("Refreshing.....");
 		System.out.println("Authority: "+authority+", Power: "+power);
 		//create elements
@@ -61,15 +69,22 @@ public class TrainModelGUI extends TrainModel {
 		panel.removeAll();
 		
 		//display key inputs
-		VelocityPanel = new JLabel("Train VelocityPanel: " + power*2);
+		VelocityPanel = new JLabel("Train Velocity: " + power*2);
 		VelocityPanel.setBounds(500, 100, 200, 100);
 		panel.add(VelocityPanel);
-		AuthorityPanel = new JLabel("Train AuthorityPanel: " + authority);
+		AuthorityPanel = new JLabel("Train Authority: " + authority);
 		AuthorityPanel.setBounds(500,200,200,100);
 		panel.add(AuthorityPanel);
-		PowerPanel = new JLabel("Train PowerPanel Input: " + power);
+		PowerPanel = new JLabel("Train Power Input: " + power);
 		PowerPanel.setBounds(500,300,200,100);
 		panel.add(PowerPanel);
+
+		String status;
+		if (breaks) status = "on";
+		else status = "off";
+		BreaksPanel = new JLabel("Train Break Status: " + status);
+		BreaksPanel.setBounds(500,400,200,100);
+		panel.add(BreaksPanel);
 		panel.setVisible(true);
 	}
 }

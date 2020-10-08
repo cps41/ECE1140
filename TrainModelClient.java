@@ -4,7 +4,7 @@ import java.rmi.registry.Registry;
 import javax.swing.*;
 import project.*;
 
-public class Client {    
+public class TrainModelClient {    
     private static final int PORTNUMBER = 0;    
     private static final String cpuIP = "3.131.133.188";    
     private static ServerInterface mini;    
@@ -20,13 +20,15 @@ public class Client {
 	        //receive key inputs
 	        Object power = receive("power");
             Object authority = receive("authority");
+            Object breaks = receive("breaks");
             //send key outputs
             if (authority == null) authority = 0.0f;
             if (power == null) power = 0.0f;
+            if (breaks == null) breaks = false;
             send("authority", authority);
             send("velocity", (float) power*2);
             //set key inputs
-            train.refresh((float) authority, (float) power);
+            train.refresh((float) authority, (float) power, (boolean) breaks);
         
             //wait so screen is visible
             Thread.sleep(1000);
