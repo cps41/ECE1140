@@ -38,6 +38,8 @@ public class TrainControllerClient {
 	        
 	        
 	        //send key outputs
+	        if (authority == null) authority = 0.0f;
+            if (velocity == null) velocity = 0.0f;
 	        send("brakes", 1);
 	        send("power", 50);
 	        send("authority", 20);
