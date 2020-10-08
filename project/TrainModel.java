@@ -26,36 +26,12 @@ public class TrainModel {
         }
     }
 
-    public float getAuthority() {
-        return AUTHORITY;
+    public static void setAuthority(float data) {
+        AUTHORITY = data;
     }
 
-    public float getLength() {
-        return LENGTH;
-    }
-
-    public float getWidth() {
-        return CAR_WIDTH;
-    }
-
-    public float getHeight() {
-        return CAR_HEIGHT;
-    }
-
-    public float getMass() {
-        return MASS;
-    }
-
-    public int getPassengerCount() {
-        return PASSENGER_COUNT;
-    }
-
-    public int getCrewCount() {
-        return CREW_COUNT;
-    }
-
-    public static void main(String[] args) {
-        return;
+    public static void setVelocity(float data) {
+        AUTHORITY = data;
     }
 
 
