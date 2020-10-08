@@ -4,14 +4,13 @@ import java.rmi.registry.Registry;
 import java.util.Arrays;
 import project.*;
 
-public class Client {    
+public class test {    
     private static final int PORTNUMBER = 0;    
     private static final String cpuIP = "3.131.133.188";    
     private static ServerInterface mini;    
     private static boolean connected = false;    
     private static TrainModel train = new TrainModel();
-    public static void main(String[] args) {        
-        send("Authority", train.getAuthority());        
+    public static void main(String[] args) {               
         send("key2", "value 2");        
         send("key3", 500.0);        
         int[] arrVal = new int[]{1, 2, 3};        
