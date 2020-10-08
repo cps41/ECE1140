@@ -4,7 +4,7 @@ import java.rmi.registry.Registry;
 import javax.swing.*;
 import project.*;
 
-public class Client {    
+public class TrainModelClient {    
     private static final int PORTNUMBER = 0;    
     private static final String cpuIP = "3.131.133.188";    
     private static ServerInterface mini;    
