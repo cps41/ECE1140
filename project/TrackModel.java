@@ -10,7 +10,7 @@ public class TrackModel
 		
 		//initialize for blue line
 		switchPosition = new boolean[1];
-		
+		//
 		
 	}
 	
