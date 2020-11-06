@@ -13,7 +13,8 @@ public class test {
     public static void main(String[] args) {        
         int count = 0;
         while(count<1001) {       
-            send("authority", 1023.0f);       
+            send("authority", 1023.0f);
+            send("power", 18.3f);       
             System.out.printf("Server %s = %s\n", "Authority", receive("authority"));
             count++;
         }
@@ -49,7 +50,7 @@ public class test {
             } catch (Exception e) {                
                 System.err.println("Client exception: " + e.toString());                
                 e.printStackTrace();            
-            }        
+            }           
         }    
     }    
     static void call(String key, Object...argv) {        
