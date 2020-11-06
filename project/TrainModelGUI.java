@@ -14,6 +14,8 @@ public class TrainModelGUI extends TrainModel {
 	private static JLabel AuthorityPanel;
 	private static JLabel PowerPanel;
 	private static JLabel BreaksPanel;
+	private static JLabel PassCountPanel;
+	private static JLabel 
 	
 	public TrainModelGUI() throws InterruptedException {
 		
