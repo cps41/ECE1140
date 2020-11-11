@@ -1,60 +1,90 @@
 package project;
 
 import javax.swing.*;
+import javax.swing.plaf.ButtonUI;
+
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
 
 
-public class TrainModelGUI extends TrainModel {
+public class TrainModelGUI{
 
 	//declare elements
-	public static JFrame frame;
-	private static JPanel panel;
-	private static JLabel VelocityPanel;
-	private static JLabel AuthorityPanel;
-	private static JLabel PowerPanel;
-	private static JLabel BreaksPanel;
-	private static JLabel PassCountPanel;
-	private static JLabel 
+	private TrainModel train;
+	public JFrame frame;
+	private JPanel panel;
+	private JLabel Velocity;
+	private JLabel Authority;
+	private JLabel Power;
+	private JLabel Brakes;
+	private JLabel Pass;
+	private JLabel Crew;
+	private JLabel Length;
+	private JLabel Mass;
+	private JToggleButton EBrake;
 	
-	public TrainModelGUI() throws InterruptedException {
-		
+	
+	public TrainModelGUI(int num_cars) throws InterruptedException {
+		train = new TrainModel(num_cars);
+
 		//create elements
 		frame = new JFrame();
 		panel = new JPanel();
 		
 		//configure frame
-		frame.setSize(1200, 1000);
+		frame.setSize(1000, 800);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setTitle("Train Model");
 		frame.setVisible(true);
 
 		//configure panel
-		frame.add(panel, BorderLayout.CENTER);
-		panel.setLayout(null);
+		frame.add(panel, "Center");
+		GridLayout layout = new GridLayout(3, 3);
+		layout.setHgap(5);
+		layout.setVgap(5);
+		panel.setLayout(layout);
 		
 		//display key inputs
-		VelocityPanel = new JLabel("Train Velocity: " + super.VELOCITY);
-		VelocityPanel.setBounds(500, 100, 200, 100);
-		panel.add(VelocityPanel);
-		AuthorityPanel = new JLabel("Train Authority: " + super.AUTHORITY);
-		AuthorityPanel.setBounds(500,200,200,100);
-		panel.add(AuthorityPanel);
-		PowerPanel = new JLabel("Train Power Input: " + super.POWER);
-		PowerPanel.setBounds(500,300,200,100);
-		panel.add(PowerPanel);
+		Velocity = new JLabel("Train Velocity: " + train.VELOCITY + "km/h");
+		panel.add(Velocity);
+		Authority = new JLabel("Train Authority: " + train.AUTHORITY + "km");
+		panel.add(Authority);
+		Power = new JLabel("Train Power Input: " + train.POWER + "kW");
+		panel.add(Power);
+		Pass = new JLabel("Passengers: " + train.PASSENGER_COUNT);
+		panel.add(Pass);
+		Crew = new JLabel("Crew Count: " + train.CREW_COUNT);
+		panel.add(Crew);
+		Length = new JLabel("Length: " + train.LENGTH + "m");
+		panel.add(Length);
+		Mass = new JLabel("Mass: " + train.MASS + "kg");
+		panel.add(Mass);
+		EBrake = new JToggleButton("Emergency Brake");
+		EBrake.setForeground(Color.RED);
+		EBrake.addActionListener(new EBrakeListener());
+		panel.add(EBrake);
 
 		String status;
-		if (super.BREAKS) status = "on";
+		if (train.BRAKES) status = "on";
 		else status = "off";
-		BreaksPanel = new JLabel("Train Break Status: " + status);
-		BreaksPanel.setBounds(500,400,200,100);
-		panel.add(BreaksPanel);
+		Brakes = new JLabel("Train Brake Status: " + status);
+		panel.add(Brakes);
 	}
 
-	public static void refresh(float authority, float power, boolean breaks) {
+	public void refresh(HashMap<String, Object> inputs) {
 		System.out.println("Refreshing.....");
-		System.out.println("Authority: "+authority+", Power: "+power);
+		System.out.println("Authority: "+inputs.get(schema.TrackController.authority)+", Power: "+inputs.get(schema.TrainController.power));
+
+		train.AUTHORITY = (float) inputs.get(schema.TrainController.authority);
+		train.POWER = (float) inputs.get(schema.TrainController.power);
+		train.BRAKES = (boolean) inputs.get(schema.TrainController.brake);
+		train.INTERIOR_LIGHTS = (boolean) inputs.get(schema.TrainController.interior_lights);
+		train.EXTERIOR_LIGHTS = (boolean) inputs.get(schema.TrainController.exterior_lights);
+		train.LEFT_DOORS = (boolean) inputs.get(schema.TrainController.left_doors);
+		train.RIGHT_DOORS = (boolean) inputs.get(schema.TrainController.right_doors);
+
+		
 		//create elements
 		frame.remove(panel);
 		panel = new JPanel();
@@ -71,22 +101,41 @@ public class TrainModelGUI extends TrainModel {
 		panel.removeAll();
 		
 		//display key inputs
-		VelocityPanel = new JLabel("Train Velocity: " + power*2);
-		VelocityPanel.setBounds(500, 100, 200, 100);
-		panel.add(VelocityPanel);
-		AuthorityPanel = new JLabel("Train Authority: " + authority);
-		AuthorityPanel.setBounds(500,200,200,100);
-		panel.add(AuthorityPanel);
-		PowerPanel = new JLabel("Train Power Input: " + power);
-		PowerPanel.setBounds(500,300,200,100);
-		panel.add(PowerPanel);
+		Velocity = new JLabel("Train Velocity: " + train.VELOCITY + "km/h");
+		panel.add(Velocity);
+		Authority = new JLabel("Train Authority: " + train.AUTHORITY + "km");
+		panel.add(Authority);
+		Power = new JLabel("Train Power Input: " + train.POWER + "kW");
+		panel.add(Power);
+		Pass = new JLabel("Passengers: " + train.PASSENGER_COUNT);
+		panel.add(Pass);
+		Crew = new JLabel("Crew Count: " + train.CREW_COUNT);
+		panel.add(Crew);
+		Length = new JLabel("Length: " + train.LENGTH + "m");
+		panel.add(Length);
+		Mass = new JLabel("Mass: " + train.MASS + "kg");
+		panel.add(Mass);
+		EBrake = new JToggleButton("Emergency Brake");
+		EBrake.setForeground(Color.RED);
+		EBrake.addActionListener(new EBrakeListener());
+		panel.add(EBrake);
 
 		String status;
-		if (breaks) status = "on";
+		if (brakes) status = "on";
 		else status = "off";
-		BreaksPanel = new JLabel("Train Break Status: " + status);
-		BreaksPanel.setBounds(500,400,200,100);
-		panel.add(BreaksPanel);
+		Brakes = new JLabel("Train Brake Status: " + status);
+		panel.add(Brakes);
 		panel.setVisible(true);
+	}
+
+	private class EBrakeListener implements ActionListener {
+		public void actionPerformed(ActionEvent press) {
+			train.EBRAKE = true;
+		}
+	}
+
+	private String doorStatus(boolean status) {
+		if(status) return "open";
+		else return "closed";
 	}
 }

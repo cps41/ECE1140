@@ -15,7 +15,7 @@ public class Server implements ServerInterface {
 
     private final static int PORT_NUMBER = 0;
 	//place your server ip in the string below
-    private final static String cpuIP = "3.131.133.188";
+    private final static String cpuIP = "3.134.88.176";
     private static final Server main = new Server();
 
     private static final HashMap<String, ServerDataValue> data = new HashMap<>();

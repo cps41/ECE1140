@@ -6,7 +6,7 @@ import project.*;
 
 public class test {    
     private static final int PORTNUMBER = 0;    
-    private static final String cpuIP = "3.131.133.188";    
+    private static final String cpuIP = "3.134.88.176";    
     private static ServerInterface mini;    
     private static boolean connected = false;    
     private static TrainModel train = new TrainModel();
