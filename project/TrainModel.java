@@ -17,6 +17,9 @@ public class TrainModel {
     public boolean EXTERIOR_LIGHTS;
     public boolean LEFT_DOORS;
     public boolean RIGHT_DOORS;
+    public boolean LEFT_DOORS_STATION;
+    public boolean RIGHT_DOORS_STATION;
+    public String STATION;
     public float TEMPERATURE;
     public ArrayList<Car> CARS;
     public final float CAR_LENGTH = 32.2f; // in meters
@@ -47,11 +50,37 @@ public class TrainModel {
         EXTERIOR_LIGHTS = false;
         LEFT_DOORS = true;
         RIGHT_DOORS = true;
+        LEFT_DOORS_STATION = true;
+        RIGHT_DOORS_STATION = true;
+        STATION = "";
         outputs = new HashMap<>();
         outputs.put(schema.TrainModel.velocity, VELOCITY);
         outputs.put(schema.TrainModel.authority, AUTHORITY);
         outputs.put(schema.TrainModel.velocity, VELOCITY);
         outputs.put(schema.TrainModel.velocity, VELOCITY);
+    }
+
+    public void decodeBeacon(String beacon) {
+        try {
+            int doors = Integer.parseInt(beacon.charAt(0)+"");
+            switch(doors) {
+                case 0:
+                    LEFT_DOORS_STATION = false;
+                    RIGHT_DOORS_STATION = true;
+                    break;
+                case 1:
+                    LEFT_DOORS_STATION = true;
+                    RIGHT_DOORS_STATION = false;
+                    break;
+                case 2:
+                    LEFT_DOORS_STATION = false;
+                    RIGHT_DOORS_STATION = false;
+                    break;
+            }
+            STATION = beacon.substring(1);
+        }catch(Exception e) {
+            return;
+        }
     }
 
     public void updateMass() {

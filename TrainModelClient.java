@@ -36,14 +36,18 @@ public class TrainModelClient {
             for(int i=0; i<keys.length; i++) {
                 inputs.put(keys[i], receive(keys[i]));
                 if (inputs.get(keys[i]) == null) {
-                    System.out.println(keys[i]+ " was null");
                     brake = true;
                     power = 0;
                 }
             }
 
-            //set key inputs
+            //set key outputs
             outputs = train.refresh(inputs);
+            Iterator outputs_iterator = outputs.entrySet().iterator();
+            while(outputs_iterator.hasNext()) {
+                Map.Entry element = (Map.Entry) outputs_iterator.next();
+                send((String)element.getKey(), element.getValue());
+            }
         
             //wait so screen is visible
             Thread.sleep(1000);
