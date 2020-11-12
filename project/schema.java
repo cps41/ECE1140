@@ -5,9 +5,6 @@ public class schema {
         public static final String velocity = "TrainModelVelocity";
         public static final String speed = "TrainModelSpeed";
         public static final String authority = "TrainModelAuthority";
-        public static final String power = "TrainModelPower";
-        public static final String length = "TrainModelLength";
-        public static final String mass = "TrainModelMass";
         public static final String emergency_brake = "TrainModelEmergencyBrake";
         public static final String left_door = "TrainModelLeftDoor";
         public static final String right_door = "TrainModelRightDoor";
@@ -22,7 +19,6 @@ public class schema {
         public static final String exterior_lights = "TrainControllerExteriorLights";
         public static final String left_doors = "TrainControllerLeftDoors";
         public static final String right_doors = "TrainControllerRightDoors";
-		public static final String authority = "TrainControllerAuthority";
     }
 
     public class TrackController {
