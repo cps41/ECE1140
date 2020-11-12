@@ -15,7 +15,7 @@ public class Server implements ServerInterface {
 
     private final static int PORT_NUMBER = 0;
 	//place your server ip in the string below
-    private final static String cpuIP = "3.134.88.176";
+    private final static String cpuIP = "18.216.251.172";
     private static final Server main = new Server();
 
     private static final HashMap<String, ServerDataValue> data = new HashMap<>();
@@ -28,7 +28,7 @@ public class Server implements ServerInterface {
     private static final Lock callLock = new ReentrantLock(true);
 
     // public static final long updateInterval; // from ServerInterface;
-    private static final int expirationDate = 20; // Number of update intervals before declared stale.
+    private static final int expirationDate = 50; // Number of update intervals before declared stale.
     private static final long timeDelta = updateInterval * expirationDate; // max difference from timestamp
 
     private static final Spinner spinner = new Spinner(new Character[]{' ', '-', '~', '-'}, 3); // prettified watchdog indicator

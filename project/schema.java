@@ -45,6 +45,8 @@ public class schema {
         public static final String green_status = "greenStatus";
         public static final String block = "currentBlock";
         public static final String cars = "numberOfTrainCars";
+        public static final String block_queue = "TrackModelBlockQueue";
+        public static final String authority_queue = "TrackModelAuthorityQueue";
     }
 
     public class CTCOffice {
