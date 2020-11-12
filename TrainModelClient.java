@@ -15,8 +15,6 @@ public class TrainModelClient {
         Object num_cars = receive(schema.TrackModel.cars);
         if (num_cars == null) num_cars = 1;
         TrainModelGUI train = new TrainModelGUI((int) num_cars);
-        send("power", 0f);
-        send("authority", 0f);
 
         while(train.frame.isShowing()) {     
             //receive key inputs
@@ -30,6 +28,7 @@ public class TrainModelClient {
                              schema.TrackModel.pass_count, schema.TrackModel.crew_count, schema.TrackModel.block, schema.TrackModel.cars};
 
             HashMap<String, Object> inputs = new HashMap<>();
+            HashMap<String, Object> outputs = new HashMap<>();
             
             // receive values for all keys
             // check if null
@@ -37,14 +36,14 @@ public class TrainModelClient {
             for(int i=0; i<keys.length; i++) {
                 inputs.put(keys[i], receive(keys[i]));
                 if (inputs.get(keys[i]) == null) {
-                    authority = 0.0f;
-                    power = 0.0f;
+                    System.out.println(keys[i]+ " was null");
                     brake = true;
+                    power = 0;
                 }
             }
 
             //set key inputs
-            train.refresh(inputs);
+            outputs = train.refresh(inputs);
         
             //wait so screen is visible
             Thread.sleep(1000);

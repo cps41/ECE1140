@@ -54,6 +54,19 @@ public class TrainModel {
         outputs.put(schema.TrainModel.velocity, VELOCITY);
     }
 
+    public void updateMass() {
+        MASS = MIN_CAR_WEIGHT+(PASSENGER_COUNT+CREW_COUNT)*AVG_WEIGHT_PERSON;
+    }
+
+    public void getEmergencyBrakeStatus() {
+        for(Car car : CARS) {
+            if(car.getEmergencyBrakeStatus()) {
+                EBRAKE = true;
+                POWER = 0f;
+            }
+        }
+    }
+
     public void setVelocity() {
         float force;
         if(VELOCITY == 0) force = MAX_CAR_WEIGHT*MED_ACCELERATION;
@@ -61,6 +74,7 @@ public class TrainModel {
 
         float acceleration = force/MASS;
         VELOCITY = VELOCITY + (.5f)*(ACCELERATION + acceleration);
+        ACCELERATION = acceleration;
     }
 
     public void updateCars() {
