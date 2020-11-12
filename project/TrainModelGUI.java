@@ -1,8 +1,6 @@
 package project;
 
 import javax.swing.*;
-import javax.swing.plaf.ButtonUI;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -115,7 +113,7 @@ public class TrainModelGUI{
 
 		HashMap<String, Object> outputs = new HashMap<>();
 
-		if(inputs.get(schema.TrackModel.authority) != null) train.AUTHORITY = (float) inputs.get(schema.TrackModel.authority);
+		if(inputs.get(schema.TrackModel.authority) != null) train.AUTHORITY = (int) inputs.get(schema.TrackModel.authority);
 		if(inputs.get(schema.TrainController.power) != null) train.POWER = (float) inputs.get(schema.TrainController.power);
 		if(inputs.get(schema.TrainController.brake) != null) train.BRAKES = (boolean) inputs.get(schema.TrainController.brake);
 		if(inputs.get(schema.TrainController.interior_lights) != null) train.INTERIOR_LIGHTS = (boolean) inputs.get(schema.TrainController.interior_lights);
@@ -165,12 +163,17 @@ public class TrainModelGUI{
 		outputs.put(schema.TrainModel.right_door, train.RIGHT_DOORS_STATION);
 		outputs.put(schema.TrainModel.station, train.STATION);
 
+
+		System.out.println("Or here...");
 		return outputs;
 	}
 
 	private class EBrakeListener implements ActionListener {
 		public void actionPerformed(ActionEvent press) {
-			train.EBRAKE = true;
+			AbstractButton abstractButton = (AbstractButton) press.getSource();
+			boolean selected = abstractButton.getModel().isSelected(); 
+			if(selected) train.EBRAKE = true;
+			else train.EBRAKE = false;
 		}
 	}
 

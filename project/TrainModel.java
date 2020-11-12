@@ -1,11 +1,12 @@
 package project;
 
 import java.util.*;
+import java.lang.*;
 
 public class TrainModel {
     public float POWER; // key input
     public float VELOCITY; // key output
-    public float AUTHORITY; // in meters
+    public int AUTHORITY; // in meters
     public boolean BRAKES;
     public boolean EBRAKE;
     public float LENGTH;
@@ -21,6 +22,7 @@ public class TrainModel {
     public boolean RIGHT_DOORS_STATION;
     public String STATION;
     public float TEMPERATURE;
+    public Float[] BLOCK;
     public ArrayList<Car> CARS;
     public final float CAR_LENGTH = 32.2f; // in meters
     public final float CAR_HEIGHT = 3.42f; // in meters
@@ -30,12 +32,13 @@ public class TrainModel {
     public final float MAX_CAR_WEIGHT = 56700; // in kg
     public final float MED_ACCELERATION = 0.0005f; // in km/s^2
     public final float AVG_WEIGHT_PERSON = 62f; // in kg
+    public final float GRAVITATIONAL_FORCE = 0.009807f; // in km/s^2
     public HashMap <String, Object> outputs;
 
     public TrainModel(int num_cars) {
         POWER = 0.0f;
         VELOCITY = 0.0f;
-        AUTHORITY = 0.0f;
+        AUTHORITY = 0;
         CARS = new ArrayList<>();
         for(int i=0; i<=num_cars; i++) {
             CARS.add(new Car());
@@ -52,7 +55,10 @@ public class TrainModel {
         RIGHT_DOORS = true;
         LEFT_DOORS_STATION = true;
         RIGHT_DOORS_STATION = true;
+        TEMPERATURE = 70;
         STATION = "";
+        BLOCK = new Float[3];
+        BLOCK[0] = 1f; BLOCK[1] = 1f; BLOCK[2] = 1f;
         outputs = new HashMap<>();
         outputs.put(schema.TrainModel.velocity, VELOCITY);
         outputs.put(schema.TrainModel.authority, AUTHORITY);
@@ -97,11 +103,21 @@ public class TrainModel {
     }
 
     public void setVelocity() {
-        float force;
+        if(POWER == 0) {
+            VELOCITY = 0;
+            return;
+        }
+        float block_length = BLOCK[2];
+        double elevation = BLOCK[0]*block_length*0.00001;
+        double angle = Math.atan(Math.toRadians(elevation/block_length));
+        double gravity = GRAVITATIONAL_FORCE*Math.sin(angle);
+        double force;
         if(VELOCITY == 0) force = MAX_CAR_WEIGHT*MED_ACCELERATION;
-        else force = POWER/VELOCITY;
+        else {
+            force = (POWER/VELOCITY) - gravity;
+        }
 
-        float acceleration = force/MASS;
+        float acceleration = (float) force/MASS;
         VELOCITY = VELOCITY + (.5f)*(ACCELERATION + acceleration);
         ACCELERATION = acceleration;
     }
