@@ -22,6 +22,11 @@ public class TrainModelGUI{
 	private JLabel Crew;
 	private JLabel Length;
 	private JLabel Mass;
+	private JLabel Interior;
+	private JLabel Exterior;
+	private JLabel LeftDoors;
+	private JLabel RightDoors;
+	private JLabel Temperature;
 	private JToggleButton EBrake;
 	
 	
@@ -40,7 +45,7 @@ public class TrainModelGUI{
 
 		//configure panel
 		frame.add(panel, "Center");
-		GridLayout layout = new GridLayout(3, 3);
+		GridLayout layout = new GridLayout(4, 4);
 		layout.setHgap(5);
 		layout.setVgap(5);
 		panel.setLayout(layout);
@@ -48,28 +53,44 @@ public class TrainModelGUI{
 		//display key inputs
 		Velocity = new JLabel("Train Velocity: " + train.VELOCITY + "km/h");
 		panel.add(Velocity);
+
 		Authority = new JLabel("Train Authority: " + train.AUTHORITY + "km");
 		panel.add(Authority);
+
 		Power = new JLabel("Train Power Input: " + train.POWER + "kW");
 		panel.add(Power);
+
+		Brakes = new JLabel("Train Brake Status: " + otherStatus(train.BRAKES));
+		panel.add(Brakes);
+
 		Pass = new JLabel("Passengers: " + train.PASSENGER_COUNT);
 		panel.add(Pass);
+
 		Crew = new JLabel("Crew Count: " + train.CREW_COUNT);
 		panel.add(Crew);
+
 		Length = new JLabel("Length: " + train.LENGTH + "m");
 		panel.add(Length);
+
 		Mass = new JLabel("Mass: " + train.MASS + "kg");
 		panel.add(Mass);
+
+		Interior = new JLabel("Interior Lights: " + otherStatus(train.INTERIOR_LIGHTS));
+		panel.add(Interior);
+
+		Exterior = new JLabel("Interior Lights: " + otherStatus(train.EXTERIOR_LIGHTS));
+		panel.add(Exterior);
+
+		LeftDoors = new JLabel("Left Doors: " + doorStatus(train.LEFT_DOORS));
+		panel.add(LeftDoors);
+
+		RightDoors = new JLabel("Right Doors: " + doorStatus(train.RIGHT_DOORS));
+		panel.add(RightDoors);
+
 		EBrake = new JToggleButton("Emergency Brake");
 		EBrake.setForeground(Color.RED);
 		EBrake.addActionListener(new EBrakeListener());
 		panel.add(EBrake);
-
-		String status;
-		if (train.BRAKES) status = "on";
-		else status = "off";
-		Brakes = new JLabel("Train Brake Status: " + status);
-		panel.add(Brakes);
 	}
 
 	public void refresh(HashMap<String, Object> inputs) {
@@ -83,6 +104,8 @@ public class TrainModelGUI{
 		train.EXTERIOR_LIGHTS = (boolean) inputs.get(schema.TrainController.exterior_lights);
 		train.LEFT_DOORS = (boolean) inputs.get(schema.TrainController.left_doors);
 		train.RIGHT_DOORS = (boolean) inputs.get(schema.TrainController.right_doors);
+		train.PASSENGER_COUNT = (int) inputs.get(schema.TrackModel.pass_count);
+		train.CREW_COUNT = 4;
 
 		
 		//create elements
@@ -97,35 +120,51 @@ public class TrainModelGUI{
 
 		//configure panel
 		frame.add(panel, BorderLayout.CENTER);
-		panel.setLayout(null);
 		panel.removeAll();
+		
+		//display key inputs
 		
 		//display key inputs
 		Velocity = new JLabel("Train Velocity: " + train.VELOCITY + "km/h");
 		panel.add(Velocity);
+
 		Authority = new JLabel("Train Authority: " + train.AUTHORITY + "km");
 		panel.add(Authority);
+
 		Power = new JLabel("Train Power Input: " + train.POWER + "kW");
 		panel.add(Power);
+
+		Brakes = new JLabel("Train Brake Status: " + otherStatus(train.BRAKES));
+		panel.add(Brakes);
+
 		Pass = new JLabel("Passengers: " + train.PASSENGER_COUNT);
 		panel.add(Pass);
+
 		Crew = new JLabel("Crew Count: " + train.CREW_COUNT);
 		panel.add(Crew);
+
 		Length = new JLabel("Length: " + train.LENGTH + "m");
 		panel.add(Length);
+
 		Mass = new JLabel("Mass: " + train.MASS + "kg");
 		panel.add(Mass);
+
+		Interior = new JLabel("Interior Lights: " + otherStatus(train.INTERIOR_LIGHTS));
+		panel.add(Interior);
+
+		Exterior = new JLabel("Interior Lights: " + otherStatus(train.EXTERIOR_LIGHTS));
+		panel.add(Exterior);
+
+		LeftDoors = new JLabel("Left Doors: " + doorStatus(train.LEFT_DOORS));
+		panel.add(LeftDoors);
+
+		RightDoors = new JLabel("Right Doors: " + doorStatus(train.RIGHT_DOORS));
+		panel.add(RightDoors);
+
 		EBrake = new JToggleButton("Emergency Brake");
 		EBrake.setForeground(Color.RED);
 		EBrake.addActionListener(new EBrakeListener());
 		panel.add(EBrake);
-
-		String status;
-		if (brakes) status = "on";
-		else status = "off";
-		Brakes = new JLabel("Train Brake Status: " + status);
-		panel.add(Brakes);
-		panel.setVisible(true);
 	}
 
 	private class EBrakeListener implements ActionListener {
@@ -137,5 +176,10 @@ public class TrainModelGUI{
 	private String doorStatus(boolean status) {
 		if(status) return "open";
 		else return "closed";
+	}
+
+	private String otherStatus(boolean status) {
+		if(status) return "on";
+		else return "off";
 	}
 }
