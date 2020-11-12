@@ -87,6 +87,9 @@ public class TrainModelGUI{
 		RightDoors = new JLabel("Right Doors: " + doorStatus(train.RIGHT_DOORS));
 		panel.add(RightDoors);
 
+		Temperature = new JLabel("Temperature: " + train.TEMPERATURE +"ºF");
+		panel.add(Temperature);
+
 		EBrake = new JToggleButton("Emergency Brake");
 		EBrake.setForeground(Color.RED);
 		EBrake.addActionListener(new EBrakeListener());
@@ -107,64 +110,37 @@ public class TrainModelGUI{
 		train.PASSENGER_COUNT = (int) inputs.get(schema.TrackModel.pass_count);
 		train.CREW_COUNT = 4;
 
-		
-		//create elements
-		frame.remove(panel);
-		panel = new JPanel();
-		
-		//configure frame
-		frame.setSize(1200, 1000);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setTitle("Train Model");
-		frame.setVisible(true);
-
-		//configure panel
-		frame.add(panel, BorderLayout.CENTER);
-		panel.removeAll();
+		train.updateCars();
+		train.updateMass();
+		train.getEmergencyBrakeStatus();
+		train.setVelocity();
 		
 		//display key inputs
-		
-		//display key inputs
-		Velocity = new JLabel("Train Velocity: " + train.VELOCITY + "km/h");
-		panel.add(Velocity);
+		Velocity.setText("Train Velocity: " + train.VELOCITY + "km/h");
 
-		Authority = new JLabel("Train Authority: " + train.AUTHORITY + "km");
-		panel.add(Authority);
+		Authority.setText("Train Authority: " + train.AUTHORITY + "km");
 
-		Power = new JLabel("Train Power Input: " + train.POWER + "kW");
-		panel.add(Power);
+		Power.setText("Train Power Input: " + train.POWER + "kW");
 
-		Brakes = new JLabel("Train Brake Status: " + otherStatus(train.BRAKES));
-		panel.add(Brakes);
+		Brakes.setText("Train Brake Status: " + otherStatus(train.BRAKES));
 
-		Pass = new JLabel("Passengers: " + train.PASSENGER_COUNT);
-		panel.add(Pass);
+		Pass.setText("Passengers: " + train.PASSENGER_COUNT);
 
-		Crew = new JLabel("Crew Count: " + train.CREW_COUNT);
-		panel.add(Crew);
+		Crew.setText("Crew Count: " + train.CREW_COUNT);
 
-		Length = new JLabel("Length: " + train.LENGTH + "m");
-		panel.add(Length);
+		Length.setText("Length: " + train.LENGTH + "m");
 
-		Mass = new JLabel("Mass: " + train.MASS + "kg");
-		panel.add(Mass);
+		Mass.setText("Mass: " + train.MASS + "kg");
 
-		Interior = new JLabel("Interior Lights: " + otherStatus(train.INTERIOR_LIGHTS));
-		panel.add(Interior);
+		Interior.setText("Interior Lights: " + otherStatus(train.INTERIOR_LIGHTS));
 
-		Exterior = new JLabel("Interior Lights: " + otherStatus(train.EXTERIOR_LIGHTS));
-		panel.add(Exterior);
+		Exterior.setText("Interior Lights: " + otherStatus(train.EXTERIOR_LIGHTS));
 
-		LeftDoors = new JLabel("Left Doors: " + doorStatus(train.LEFT_DOORS));
-		panel.add(LeftDoors);
+		LeftDoors.setText("Left Doors: " + doorStatus(train.LEFT_DOORS));
 
-		RightDoors = new JLabel("Right Doors: " + doorStatus(train.RIGHT_DOORS));
-		panel.add(RightDoors);
+		RightDoors.setText("Right Doors: " + doorStatus(train.RIGHT_DOORS));
 
-		EBrake = new JToggleButton("Emergency Brake");
-		EBrake.setForeground(Color.RED);
-		EBrake.addActionListener(new EBrakeListener());
-		panel.add(EBrake);
+		Temperature.setText("Temperature: " + train.TEMPERATURE +"ºF");
 	}
 
 	private class EBrakeListener implements ActionListener {

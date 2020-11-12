@@ -6,16 +6,17 @@ import project.*;
 
 public class test {    
     private static final int PORTNUMBER = 0;    
-    private static final String cpuIP = "3.134.88.176";    
+    private static final String cpuIP = "18.216.251.172";    
     private static ServerInterface mini;    
     private static boolean connected = false;    
-    private static TrainModel train = new TrainModel();
+    private static TrainModel train = new TrainModel(3);
     public static void main(String[] args) {        
         int count = 0;
         while(count<1001) {       
-            send("authority", 1023.0f);
-            send("power", 18.3f);       
-            System.out.printf("Server %s = %s\n", "Authority", receive("authority"));
+            send(schema.TrackModel.authority, 1023.0f);
+            send(schema.TrainController.power, 18.3f);       
+            System.out.println(count);
+            System.out.printf("Server %s = %s\n", "Authority", receive(schema.TrackModel.authority));
             count++;
         }
     }    
