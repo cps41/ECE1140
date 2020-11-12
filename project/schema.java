@@ -9,7 +9,8 @@ public class schema {
         public static final String length = "TrainModelLength";
         public static final String mass = "TrainModelMass";
         public static final String emergency_brake = "TrainModelEmergencyBrake";
-        public static final String door_side = "TrainModelDoorSide";
+        public static final String left_door = "TrainModelLeftDoor";
+        public static final String right_door = "TrainModelRightDoor";
         public static final String station = "TrainModelStationName";
     }
 
