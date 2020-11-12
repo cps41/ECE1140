@@ -45,8 +45,6 @@ public class TrainModelClient {
 
             //set key inputs
             train.refresh(inputs);
-
-
         
             //wait so screen is visible
             Thread.sleep(1000);
