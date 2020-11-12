@@ -55,8 +55,6 @@ public class TrainModel {
     }
 
     public void setVelocity() {
-        if(POWER > MAX_POWER) return;
-
         float force;
         if(VELOCITY == 0) force = MAX_CAR_WEIGHT*MED_ACCELERATION;
         else force = POWER/VELOCITY;
