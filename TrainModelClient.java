@@ -13,7 +13,7 @@ public class TrainModelClient {
 
     public static void main(String[] args) throws InterruptedException {
         Object num_cars = receive(schema.TrackModel.cars);
-        if (num_cars == null) num_cars = 1;
+        if (num_cars == null) num_cars = 3;
         TrainModelGUI train = new TrainModelGUI((int) num_cars);
 
         while(train.frame.isShowing()) {     
