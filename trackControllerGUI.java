@@ -3,6 +3,7 @@ package project;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
 
 
 public class trackControllerGUI extends trackController {
@@ -19,6 +20,8 @@ public class trackControllerGUI extends trackController {
 	private static String brokenString;
 	private static String[] switchList = {"Right", "Left"};
 	private static String[] crossingList = {"Activate", "Deactivate"};
+	private static ArrayList<java.io.File> PLCs = new ArrayList<java.io.File>();
+	public static PLCInterpreter interpreter;
 	
 	//declare swing elements
 	private static JFrame frame;
@@ -115,10 +118,10 @@ public class trackControllerGUI extends trackController {
 		failCheck.setBounds(100,100,200,25);
 		failCheck.addActionListener(e -> {
 			//check for track failures in track arrays
-			for (int i=1; i<super.redLine.length; i++)
+			for (int i=0; i<super.redLine.length; i++)
 				if (!super.getTrackStatus("red", i)) 
 					redFailString = redFailString + i + ", ";
-			for (int i=1; i<super.greenLine.length; i++)
+			for (int i=0; i<super.greenLine.length; i++)
 				if (!super.getTrackStatus("green", i))
 					greenFailString = greenFailString + i + ", ";
 			failLabelRed.setText(redFailString);
@@ -130,9 +133,9 @@ public class trackControllerGUI extends trackController {
 		failSend.setBounds(850,100,250,25);
 		failSend.addActionListener(e -> {
 			//acts purely as acknowledgement for simulation then track is "fixed"
-			for (int i=1; i<super.redLine.length; i++)
+			for (int i=0; i<super.redLine.length; i++)
 				super.setTrackStatus("red", i, true);
-			for (int i=1; i<super.greenLine.length; i++)
+			for (int i=0; i<super.greenLine.length; i++)
 				super.setTrackStatus("green", i, true);
 			redFailString = "";
 			greenFailString = "";
@@ -249,7 +252,7 @@ public class trackControllerGUI extends trackController {
 		panel.add(submit);
 		
 		//configure PLC uploader
-		//PLCInterpreter interpreter = new PLCInterpreter();
+		interpreter = new PLCInterpreter();
 		noPLC.setBounds(450,850,500,25);
 		noPLC.setForeground(Color.RED);
 		noPLC.setVisible(false);
@@ -257,17 +260,12 @@ public class trackControllerGUI extends trackController {
 		PLC1.setBounds(100,800,200,25);
 		PLC1.addActionListener(e -> {
 			//upload first PLC
-			try {
-				PLCInterpreter interpreter = new PLCInterpreter();
-				interpreter.openFirstFile();
-				if (!interpreter.getFileType().equals("txt")) {
-					noPLC.setVisible(true);
-					mismatchPLC.setVisible(false);
-				}
-				else if (interpreter.getFileType().equals("txt")) noPLC.setVisible(false);
-			} catch (Exception e1) {
-				System.out.println("Cancelled");
+			interpreter.openFirstFile();
+			if (!interpreter.getFileType().equals("txt")) {
+				noPLC.setVisible(true);
+				mismatchPLC.setVisible(false);
 			}
+			else if (interpreter.getFileType().equals("txt")) noPLC.setVisible(false);
 		});
 		panel.add(PLC1);
 		mismatchPLC.setBounds(450,850,500,25);
@@ -276,24 +274,29 @@ public class trackControllerGUI extends trackController {
 		panel.add(mismatchPLC);
 		PLC2.setBounds(900,800,200,25);
 		PLC2.addActionListener(e -> {
-			//PLCInterpreter interpreter = new PLCInterpreter();
-			//upload first PLC
-			try {
-				PLCInterpreter interpreter = new PLCInterpreter();
-				interpreter.openSecondFile();
-				if (!interpreter.compareFiles()) {
-					mismatchPLC.setVisible(true);
-					noPLC.setVisible(false);
-				}
-				else if (interpreter.compareFiles()) {
-					mismatchPLC.setVisible(false);
-					interpreter.runPLC();
-				}
-			} catch (Exception e1) {
-				System.out.println("Cancelled");
+			//upload second PLC
+			interpreter.openSecondFile();
+			if (!interpreter.compareFiles()) {
+				mismatchPLC.setVisible(true);
+				noPLC.setVisible(false);
+			}
+			else if (interpreter.compareFiles()) {
+				mismatchPLC.setVisible(false);
+				PLCs.add(interpreter.file1);
+
 			}
 		});
 		panel.add(PLC2);
+		
+		//double check all elements are on panel
+		panel.repaint();
+	}
+	
+	public void run() {
+		//run uploaded PLCS
+			System.out.println("Running PLCs");
+			for (int i=0; i<PLCs.size(); i++)
+				interpreter.runPLC(PLCs.get(i));
 	}
 }
 
