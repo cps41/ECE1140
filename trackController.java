@@ -5,6 +5,8 @@ import java.util.*;
 public class trackController {
 	
 	//variable declaration
+	public static List<Queue<Boolean>> redQueue; 
+	public static List<Queue<Boolean>> greenQueue;
 	public static float authority;
 	public static int redLine[][]; 		//1st dimension is track section (0 represents yard)
 	public static int greenLine[][]; 	//2nd is switch position, crossing status, train presence, track status, switch existence, crossing existence 
