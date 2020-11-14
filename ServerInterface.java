@@ -1,4 +1,5 @@
 /* Needed on both Server and Client */
+package test;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

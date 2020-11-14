@@ -1,7 +1,9 @@
 /* Needed on Client only */
+package test;
+
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.Arrays;
+import java.util.*;
 import project.*;
 
 public class test {    
@@ -9,14 +11,31 @@ public class test {
     private static final String cpuIP = "18.216.251.172";    
     private static ServerInterface mini;    
     private static boolean connected = false;    
-    private static TrainModel train = new TrainModel(3);
-    public static void main(String[] args) {        
+    private static TrainModel train = new TrainModel(3, "TestTrain");
+    public static void main(String[] args) throws InterruptedException {        
         int count = 0;
         while(count<1001) {       
+            HashMap<String, Integer> authority = new HashMap<>();
+            for(int i=0; i<5; i++) {
+                authority.put("Train"+i, i*6);
+            }
+
+            HashMap<String, Integer> speed = new HashMap<>();
+            for(int i=0; i<5; i++) {
+                speed.put("Train"+i, i*6);
+            }
+
+            HashMap<String, Float[]> block = new HashMap<>();
+            for(int i=0; i<5; i++) {
+                Float[] block_array = {0.5f, 50f, 65f};
+                block.put("Train"+i, block_array);
+            }
+            
             send(schema.TrackModel.authority, 1023.0f);
-            send(schema.TrainController.power, 18.3f);       
+            send(schema.TrainController.power, 180.3f);       
             System.out.println(count);
             System.out.printf("Server %s = %s\n", "Authority", receive(schema.TrackModel.authority));
+            TrainModelClient client = new TrainModelClient();
             count++;
         }
     }    
