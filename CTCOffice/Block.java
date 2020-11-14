@@ -1,8 +1,10 @@
 public class Block {
-    public boolean TRAIN_PRESENCE,SWITCH_TYPE;// false for less
-    public Block[] CONNECTS = {null,null,null};//source,sink1,sink2
-    public int DESTINATION,BLOCK_NUMBER,SPEED_LIMIT,DIRECTION,BLOCK_LENGTH,CROSSING,SWITCH,GRADE;
+    public boolean PRESENCE;
+    public Block[] CONNECTS = {null,null,null};//before,after,deviation
+    public int SWITCH,CROSSING,DIRECTION,LIMIT,NUMBER;
+    public float LENGTH,GRADE;
+    String SECTION,DESTINATION;
     Block(int num){ 
-    BLOCK_NUMBER = num;
+    NUMBER = num;
     }
 }

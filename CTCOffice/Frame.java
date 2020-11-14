@@ -21,8 +21,8 @@ public class Frame extends JFrame {
     }
     private void configureTabbedPane(){
       tp.setBounds(10,10,950,560);
-      tp.add("green",CTCSystem.GREEN_LINE_CONTROLLER.PANEL);
-      tp.add("red",CTCSystem.RED_LINE_CONTROLLER.PANEL);
+      //tp.add("green",CTCSystem.GREEN_LINE_CONTROLLER.PANEL);
+      //tp.add("red",CTCSystem.RED_LINE_CONTROLLER.PANEL);
       add(tp);
     }
 }

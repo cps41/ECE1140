@@ -1,15 +1,11 @@
 import java.util.ArrayList;
 
 public class CTCSystem {
-    public int git; 
-
-
-    public static int NUMBER_OF_LINES = 2 ;
-    public static RailLineController RED_LINE_CONTROLLER;
-    public static RailLineController GREEN_LINE_CONTROLLER;
+   
+    public static int SIZE = 2; 
+    public static RailLine RED_LINE
+    public static RailLine GREEN_LINE;
     public static Frame FRAME;
-    public static String[] LINE_NAMES = {"green","red","blue","orange","yellow"};
-    public static ArrayList<ArrayList<String>> ALAL_LINE_DESTINATIONS = new ArrayList< ArrayList<String> >();
     //signals
     public static final int SUCCESSFULL_DISPATCH = 1;
     public static final int TRACK_TRAFFIC = 2;

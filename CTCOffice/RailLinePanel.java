@@ -6,14 +6,11 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 public class RailLinePanel extends JPanel {
-  private String LINE_NAME;
   public DispatchPanel DISPATCH_PANEL = new DispatchPanel();
   private JLabel PANEL_LABEL = new JLabel();
   public RailLineController CONTROLLER;
-  public ArrayList<String> AL_DESTINATIONS = new ArrayList<String>();
+  //default consutructor.
   RailLinePanel(){ 
-    configureMainPanel();
-    //the other configurators are called in the setLineColor fucntion
   }
     //component configurators
   private void configureDispatchPanel(){
@@ -27,7 +24,6 @@ public class RailLinePanel extends JPanel {
     }
   private void configurePanelLabel(){
       // PANEL_LABEL.setBounds(20, 20, 200, 40);
-      PANEL_LABEL.setText(LINE_NAME+" Panel");
       add(PANEL_LABEL);
     }
   public void configurePanel(String name, RailLineController controller,String[] destinations,int size){
@@ -53,30 +49,20 @@ public class RailLinePanel extends JPanel {
     //constructor
     DispatchPanel(){
           setBorder(BorderFactory.createLineBorder(Color.black));
-          configurePanelLabel();
-          configureComboBoxLabel();
           configureComboBox();
-          configureTimeTextField();
           configureButton();
-          configureRadioButton();
+          add(PANEL_LABEL);
+          add(DESTINATION_COMBOBOX_LABEL);
+          add(DESTINATION_COMBOBOX);
+          add(TIME_OF_ARRIVAL_TEXTFIELD);
+          add(BUTTON);
+          add(DISPATCH_MODE_RADIOBUTTON);
       }
     //component configuration
-    private void configurePanelLabel(){
-          add(PANEL_LABEL);
-      }
     private void configureComboBox(){
           DESTINATION_COMBOBOX.setEditable(true);
           DESTINATION_COMBOBOX.setPreferredSize(new Dimension(150,20));
-          add(DESTINATION_COMBOBOX);
-      }
-    private void configureRadioButton(){
-          add(DISPATCH_MODE_RADIOBUTTON);
-      }
-    private void configureComboBoxLabel(){
-          add(DESTINATION_COMBOBOX_LABEL);
-      }
-    private void configureTimeTextField(){
-          add(TIME_OF_ARRIVAL_TEXTFIELD);
+
       }
     private void configureButton(){
       BUTTON.addActionListener(new ActionListener() {
@@ -84,10 +70,10 @@ public class RailLinePanel extends JPanel {
               dispatchButtonPressed();
           }
       });
-      add(BUTTON);
-      }
-    public void setDestinations(){
-         for (int i=0;i<AL_DESTINATIONS.size();i++){DESTINATION_COMBOBOX.addItem(AL_DESTINATIONS.get(i));}
+    }
+    public void configure(String color,ArrayList<String> destinations){
+         PANBEL_LABEL.setText(color +" Line");
+         for (int i=0;i<destinations.size();i++){DESTINATION_COMBOBOX.addItem(destinations.get(i));}
       }
     //action event function
     private void dispatchButtonPressed(){

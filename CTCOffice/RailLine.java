@@ -5,89 +5,62 @@ import java.util.LinkedList;
 import java.lang.Math;
 import java.util.Stack;
 
-public class RailLineController{
+public class RailLine {
     //variables 
     public RailLinePanel PANEL = new RailLinePanel();
-    public ArrayList<String> DESTINATION_NAMES = new ArrayList<String>();
-    public ArrayList<Queue<Boolean>> SWITCH_QUEUE = new ArrayList< Queue<Boolean> >();
     public LinkedList<Integer> AUTHORITIES = new LinkedList<Integer>();
     public LinkedList<Integer[]> TRAIN_CONTROL = new LinkedList<Integer[]>();
-    public int NUMBER_OF_BLOCKS;
+    public int SIZE;
     public Block[] BLOCKS;
-    public int NUMBER_OF_SWITCHES;
-    public boolean DISPATCH_SIGNAL_TOGGLE;
-    public int[] DISPATCH_SIGNAL = {-1         ,-1        ,-1          ,-1       ,-1};
-    //                              destination,time(hour),time(minute),authority,speed
     //constructor
-    RailLineController(String name,int num,int[][] array,float[][] configuration,String[] destinations){
-        configureBlocks(num,array,configuration,destinations);
-        for (int i=0;i<num;i++){
-            SWITCH_QUEUE.add(new LinkedList<Boolean>());
-        }
-
-        PANEL.configurePanel(name,this,destinations,num);
-        DISPATCH_SIGNAL_TOGGLE = false;
+    RailLineController(int size,int[][] intArray,float[][] floatArray,String[][] stringArray){
+        SIZE = num;
+        configureBlocks(intArray,floatArray,stringArray);
+        configurePanel(color);
     }
+    
     //configurators          number of blocks, block array
-    private void configureBlocks(int num,int[][] array,float[][] configure,String[] destinations){
+    private void configureBlocks(int[][] intArray,float[][] floatArray,String[][] stringArray){
         BLOCKS = new Block[num];
-        for (int i=0;i<num;i++){BLOCKS[i] = new Block(i);}
-        for (int i=0;i<num;i++){
-            if (destinations[i] != "0"){
-                BLOCKS[i].DESTINATION = DESTINATION_NAMES.size();
-                DESTINATION_NAMES.add(destinations[i]);
-            }else{BLOCKS[i].DESTINATION = -1;}
-        }
-        NUMBER_OF_BLOCKS = num;
-        int switchNum;
-        for (int i=0;i<num;i++){
-            BLOCKS[i].CROSSING = array[i][1];
-            BLOCKS[i].DIRECTION = array[i][2];
-            BLOCKS[i].BLOCK_LENGTH = (int)configure[i][0];
-            BLOCKS[i].GRADE = (int)configure[i][1];
-            BLOCKS[i].SPEED_LIMIT =(int)configure[i][2];
-                }
-        int enterSwitch = 0 ;
-        for (int i=0;i<num-1;i++){ if (array[i][0] ==-array[num-1][0]){enterSwitch = i;}}
-        BLOCKS[num-1].CONNECTS[0] = null;
-        BLOCKS[num-1].CONNECTS[1] = BLOCKS[enterSwitch];
-        BLOCKS[enterSwitch].CONNECTS[2] = BLOCKS[num-1];
-        for (int i=0;i<num-1;i++){//configured Block array
-            if (array[i][0] == 0){//not a switch, or affiliated with one 
+        for (int i=0;i<SIZE;i++){
+            BLOCKS[i] = new Block(i);
+            BLOCKS[i].SWITCH = intArray[i][0];
+            BLOCKS[i].CROSSING = intArray[i][1];
+            BLOCKS[i].DIRECTION = intArray[i][2];
+            BLOCKS[i].LIMIT = intArray[i][3];
+            BLOCKS[i].LENGTH = floatArray[i][0];
+            BLOCKS[i].GRADE = floatArray[i][1];
+            BLOCKS[i].SECTION = stringArray[i][0];
+            BLOCKS[i].DESTINATION = stringArray[i][1];
+            if (BLOCKS[i].SWITCH >= 0 && i!=SIZE-1 && i!=SIZE-2){
                 BLOCKS[i].CONNECTS[0] = BLOCKS[i-1];
                 BLOCKS[i].CONNECTS[1] = BLOCKS[i+1];
-                BLOCKS[i].CONNECTS[2] = null;
-            }
-            else if (array[i][0] > 0){//connected to a switch or is a switch
-                switchNum = array[i][0];
-                if( Math.abs(array[i-1][0]) == Math.abs(array[i][0])){
-                    BLOCKS[i].CONNECTS[0] = BLOCKS[i+1];
-                    BLOCKS[i].CONNECTS[1] = BLOCKS[i-1];
-                    BLOCKS[i].SWITCH_TYPE = false;
-                    BLOCKS[i-1].CONNECTS[0] = BLOCKS[i-2];
-                    BLOCKS[i-1].CONNECTS[1] = BLOCKS[i];
-                    for (int j=0;j<num-1;j++){ if (array[j][0] == -switchNum &&  j != (i-1) ){
-                        BLOCKS[j].CONNECTS[0] = BLOCKS[i];
-                        BLOCKS[j].CONNECTS[1] = BLOCKS[j+1];
-                        BLOCKS[i].CONNECTS[2] = BLOCKS[j];
-                    }}
-                }else{
-                    BLOCKS[i].CONNECTS[0] = BLOCKS[i-1];
-                    BLOCKS[i].CONNECTS[1] = BLOCKS[i+1];
-                    BLOCKS[i].SWITCH_TYPE = true;
-                    BLOCKS[i+1].CONNECTS[0] = BLOCKS[i];
-                    BLOCKS[i+1].CONNECTS[1] = BLOCKS[i+2];
-                    for (int j=0;j<num-1;j++){ if (array[j][0] == -switchNum &&  j != (i+1) ){
-                        BLOCKS[j].CONNECTS[1] = BLOCKS[i];
-                        BLOCKS[j].CONNECTS[0] = BLOCKS[j-1];
-                        BLOCKS[i].CONNECTS[2] = BLOCKS[j];
+                if (BLOCKS[i].SWITCH > 0){
+                    for (int j=0;j<SIZE;j++){ if (BLOCKS[i].SWITCH == -BLOCKS[j].SWITCH){
+                        if (!(j==i+1 || j==i-1)){
+                            BLOCKS[i].CONNECTS[2] = BLOCKS[j];
+                            if (BLOCKS[i+1].SWITCH == -BLOCKS[i].SWITCH){
+                                BLOCKS[j].CONNECTS[0] = BLOCKS[j-1];
+                                BLOCKS[j].CONNECTS[1] = BLOCKS[i];
+                            }
+                            else{
+                                BLOCKS[j].CONNECTS[1] = BLOCKS[j+1];
+                                BLOCKS[j].CONNECTS[0] = BLOCKS[i];
+                            }
+                        }
+                        else {
+                            BLOCKS[j].CONNECTS[0] = BLOCKS[j-1];
+                            BLOCKS[j].CONNECTS[1] = BLOCKS[j+1];
+                        }
                     }}
                 }
             }
         }
+    }
+    private void configurePanel(){
+        
 
     }
-
     //methods
     public int dispatchSignal(int destination,int[] time){
         ArrayList<Block> pathThere = new ArrayList<Block>();
@@ -256,73 +229,6 @@ public class RailLineController{
         }
         return length;
     }
-    private void generateQueues(ArrayList<Block> there, ArrayList<Block> back){
-        AUTHORITIES.add(there.size());
-        AUTHORITIES.add(back.size());
-        Integer[] info = new Integer[3];
-        for (int i = there.size()-1; i>=0;i--){
-            info[0] = there.get(i).GRADE;
-            info[1] = there.get(i).SPEED_LIMIT;
-            info[2] = there.get(i).BLOCK_LENGTH;
-            TRAIN_CONTROL.add(info);/*
-            if (there.get(i).CONNECTS[2] != null){
-                if (there.get(i-1) == there.get(i).CONNECTS[1] || there.get(i-1) == there.get(i).CONNECTS[2]{
-
-                }
-                else {
-
-                }
- 
-                if(there.get(i+1) == there.get(i).CONNECTS[2]){
-                    if (there.get(i).CONNECTS[2].BLOCK_NUMBER > there.get(i).CONNECTS[1].BLOCK_NUMBER){
-                        SWITCH_QUEUE.get(there.get(i).BLOCK_NUMBER).add(true);
-                        System.out.println("add true at "+there.get(i).BLOCK_NUMBER);
-                    }
-                    else{
-                        SWITCH_QUEUE.get(there.get(i).BLOCK_NUMBER).add(false);
-                        System.out.println("add false at "+there.get(i).BLOCK_NUMBER);
-                    }
-                }
-                else{
-                    if (there.get(i).CONNECTS[1].BLOCK_NUMBER > there.get(i).CONNECTS[2].BLOCK_NUMBER){
-                        SWITCH_QUEUE.get(there.get(i).BLOCK_NUMBER).add(true);
-                        System.out.println("add true at "+there.get(i).BLOCK_NUMBER);
-                    }
-                    else{
-                        SWITCH_QUEUE.get(there.get(i).BLOCK_NUMBER).add(false);
-                        System.out.println("add false at "+there.get(i).BLOCK_NUMBER);
-                    }
-                }
-            }*/
-        }
-        for (int i = back.size()-1; i>=0;i--){
-            info[0] = back.get(i).GRADE;
-            info[1] = back.get(i).SPEED_LIMIT;
-            info[2] = back.get(i).BLOCK_LENGTH;
-            TRAIN_CONTROL.add(info);/*
-            if (back.get(i).CONNECTS[2] != null){
-                if(back.get(i-1) == back.get(i).CONNECTS[2]){
-                    if (back.get(i).CONNECTS[2].BLOCK_NUMBER > back.get(i).CONNECTS[1].BLOCK_NUMBER){
-                        SWITCH_QUEUE.get(back.get(i).BLOCK_NUMBER).add(true);
-                        System.out.println("add true at "+back.get(i).BLOCK_NUMBER);
-                    }
-                    else{
-                        SWITCH_QUEUE.get(back.get(i).BLOCK_NUMBER).add(false);
-                        System.out.println("add false at "+back.get(i).BLOCK_NUMBER);
-                    }
-                }
-                else{
-                    if (back.get(i).CONNECTS[1].BLOCK_NUMBER > back.get(i).CONNECTS[2].BLOCK_NUMBER){
-                        SWITCH_QUEUE.get(back.get(i).BLOCK_NUMBER).add(true);
-                        System.out.println("add true at "+back.get(i).BLOCK_NUMBER);
-                    }
-                    else{
-                        SWITCH_QUEUE.get(back.get(i).BLOCK_NUMBER).add(false);
-                        System.out.println("add false at "+back.get(i).BLOCK_NUMBER);
-                    }
-                }*/
-        }
-    }
 }
 
 
@@ -331,7 +237,45 @@ public class RailLineController{
 
 /*
 
-
+        int switchNum;
+        int fundamentalSwitch;
+        for (int i=0;i<num-1;i++){ if (array[i][0] ==-array[num-1][0]){enterSwitch = i;}}
+        BLOCKS[num-1].CONNECTS[0] = null;
+        BLOCKS[num-1].CONNECTS[1] = BLOCKS[enterSwitch];
+        BLOCKS[enterSwitch].CONNECTS[2] = BLOCKS[num-1];
+        for (int i=0;i<num-1;i++){//configured Block array
+            if (array[i][0] == 0){//not a switch, or affiliated with one 
+                BLOCKS[i].CONNECTS[0] = BLOCKS[i-1];
+                BLOCKS[i].CONNECTS[1] = BLOCKS[i+1];
+                BLOCKS[i].CONNECTS[2] = null;
+            }
+            else if (array[i][0] > 0){//connected to a switch or is a switch
+                switchNum = array[i][0];
+                if( Math.abs(array[i-1][0]) == Math.abs(array[i][0])){
+                    BLOCKS[i].CONNECTS[0] = BLOCKS[i+1];
+                    BLOCKS[i].CONNECTS[1] = BLOCKS[i-1];
+                    BLOCKS[i].SWITCH_TYPE = false;
+                    BLOCKS[i-1].CONNECTS[0] = BLOCKS[i-2];
+                    BLOCKS[i-1].CONNECTS[1] = BLOCKS[i];
+                    for (int j=0;j<num-1;j++){ if (array[j][0] == -switchNum &&  j != (i-1) ){
+                        BLOCKS[j].CONNECTS[0] = BLOCKS[i];
+                        BLOCKS[j].CONNECTS[1] = BLOCKS[j+1];
+                        BLOCKS[i].CONNECTS[2] = BLOCKS[j];
+                    }}
+                }else{
+                    BLOCKS[i].CONNECTS[0] = BLOCKS[i-1];
+                    BLOCKS[i].CONNECTS[1] = BLOCKS[i+1];
+                    BLOCKS[i].SWITCH_TYPE = true;
+                    BLOCKS[i+1].CONNECTS[0] = BLOCKS[i];
+                    BLOCKS[i+1].CONNECTS[1] = BLOCKS[i+2];
+                    for (int j=0;j<num-1;j++){ if (array[j][0] == -switchNum &&  j != (i+1) ){
+                        BLOCKS[j].CONNECTS[1] = BLOCKS[i];
+                        BLOCKS[j].CONNECTS[0] = BLOCKS[j-1];
+                        BLOCKS[i].CONNECTS[2] = BLOCKS[j];
+                    }}
+                }
+            }
+        }
 
 
  current = queue.remove();
