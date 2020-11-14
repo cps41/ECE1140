@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 
 public class CTCSystem {
+    public int git; 
+
 
     public static int NUMBER_OF_LINES = 2 ;
     public static RailLineController RED_LINE_CONTROLLER;
