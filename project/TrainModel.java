@@ -1,13 +1,14 @@
 package project;
 
 import java.util.*;
-import java.lang.*;
 
 public class TrainModel {
+    public String KEY;
     public float POWER; // key input
     public float VELOCITY; // key output
     public int AUTHORITY; // in meters
     public boolean BRAKES;
+    public String BEACON;
     public boolean EBRAKE;
     public float LENGTH;
     public float MASS; // in tons
@@ -35,7 +36,8 @@ public class TrainModel {
     public final float GRAVITATIONAL_FORCE = 0.009807f; // in km/s^2
     public HashMap <String, Object> outputs;
 
-    public TrainModel(int num_cars) {
+    public TrainModel(int num_cars, String key) {
+        KEY = key;
         POWER = 0.0f;
         VELOCITY = 0.0f;
         AUTHORITY = 0;
@@ -57,16 +59,13 @@ public class TrainModel {
         RIGHT_DOORS_STATION = true;
         TEMPERATURE = 70;
         STATION = "";
+        BEACON = " ";
         BLOCK = new Float[3];
         BLOCK[0] = 1f; BLOCK[1] = 1f; BLOCK[2] = 1f;
         outputs = new HashMap<>();
-        outputs.put(schema.TrainModel.velocity, VELOCITY);
-        outputs.put(schema.TrainModel.authority, AUTHORITY);
-        outputs.put(schema.TrainModel.velocity, VELOCITY);
-        outputs.put(schema.TrainModel.velocity, VELOCITY);
     }
 
-    public void decodeBeacon(String beacon) {
+    public void decodeBeacon(String beacon) throws InterruptedException {
         try {
             int doors = Integer.parseInt(beacon.charAt(0)+"");
             switch(doors) {
@@ -87,6 +86,10 @@ public class TrainModel {
         }catch(Exception e) {
             return;
         }
+        if(!BEACON.equals(beacon)) {
+            BEACON = beacon;
+            stationArrival();
+        }
     }
 
     public void updateMass() {
@@ -103,22 +106,23 @@ public class TrainModel {
     }
 
     public void setVelocity() {
-        if(POWER == 0) {
-            VELOCITY = 0;
-            return;
-        }
+        // if(POWER == 0) {
+        //     VELOCITY = 0;
+        //     return;
+        // }
         float block_length = BLOCK[2];
         double elevation = BLOCK[0]*block_length*0.00001;
         double angle = Math.atan(Math.toRadians(elevation/block_length));
         double gravity = GRAVITATIONAL_FORCE*Math.sin(angle);
         double force;
-        if(VELOCITY == 0) force = MAX_CAR_WEIGHT*MED_ACCELERATION;
+        if(VELOCITY == 0) force = MAX_CAR_WEIGHT*MED_ACCELERATION - gravity;
         else {
-            force = (POWER/VELOCITY) - gravity;
+            force = (POWER/VELOCITY);
         }
 
         float acceleration = (float) force/MASS;
-        VELOCITY = VELOCITY + (.5f)*(ACCELERATION + acceleration);
+        System.out.println(acceleration);
+        VELOCITY = VELOCITY + (float)(.5/2)*(ACCELERATION + acceleration);
         ACCELERATION = acceleration;
     }
 
@@ -130,6 +134,18 @@ public class TrainModel {
             car.interiorLights(INTERIOR_LIGHTS);
             car.exteriorLights(EXTERIOR_LIGHTS);
         }
+    }
+
+    public void stationArrival() throws InterruptedException {
+        POWER = 0f;
+        while(VELOCITY != 0f) {
+            setVelocity();
+        }
+        LEFT_DOORS = LEFT_DOORS_STATION;
+        RIGHT_DOORS = RIGHT_DOORS_STATION;
+        Thread.sleep(60000);
+        LEFT_DOORS = true;
+        RIGHT_DOORS = true;
     }
 }
 

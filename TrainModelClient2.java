@@ -4,7 +4,7 @@ import java.rmi.registry.Registry;
 import java.util.*;
 import project.*;
 
-public class TrainModelClient {    
+public class TrainModelClient2 {    
     private static final int PORTNUMBER = 0;    
     private static final String cpuIP = "18.216.251.172";    
     private static ServerInterface mini;    
@@ -13,67 +13,48 @@ public class TrainModelClient {
     private static HashMap<String, Object> inputs = new HashMap<>();
     private static HashMap<String, Object> outputs = new HashMap<>();
 
-    public TrainModelClient() throws InterruptedException {
-        Object num_cars = receive(schema.TrackModel.cars);
-        if (num_cars == null) num_cars = 3;
-
-        while(train.frame.isShowing()) {     
-        //     //receive key inputs
-        //     Object power = new Object(), authority = new Object(), brake = new Object(), speed_limit = new Object(), speed = new Object(), 
-        //            interior_lights = new Object(), exterior_lights = new Object(), left_doors = new Object(), right_doors = new Object(), 
-        //            passenger_count = new Object(), crew_count = new Object(), block = new Object();
-
+    @SuppressWarnings("unchecked")
+    public static void main (String[] args) throws InterruptedException {
+        
+        
+        while(true) {     
+            String trains_key = schema.TrackModel.trains;
             String authority_queue = schema.TrackModel.authority_queue;
             String block_queue = schema.TrackModel.block_queue;
             String setpoint_speed = schema.TrackModel.setpoint_speed;
             String pass_count = schema.TrackModel.pass_count;
             String crew_count = schema.TrackModel.crew_count;
             String beacon = schema.TrackModel.beacon;
-            String cars = schema.TrackModel.cars;
             String power = schema.TrainController.power;
             String interior_lights = schema.TrainController.interior_lights;
             String exterior_lights = schema.TrainController.exterior_lights;
             String left_doors = schema.TrainController.left_doors;
             String right_doors = schema.TrainController.right_doors;
+
+            String[] input_key = {authority_queue, block_queue, setpoint_speed, pass_count, crew_count,
+                                  beacon, power, interior_lights, exterior_lights, left_doors, right_doors};
             
             // receive values for all keys
             // check if null
             // if so, go into failure mode
             Object input;
-            input = receive(authority_queue);
-            if(input != null) inputs.put(authority_queue, input);
-            else {
-                LinkedList<Integer> list = new LinkedList<>();
-                for(int i=0; i<=50; i++) list.add(50);
-                inputs.put(authority_queue, list);
-            }
+            ArrayList<TrainModelGUI> trains;
+            if(receive(trains_key) != null) trains = (ArrayList<TrainModelGUI>) receive(trains_key);
+            else trains = new ArrayList<>();
 
-            input = receive(block_queue);
-            if(input != null) inputs.put(block_queue, input);
-            else {
-                LinkedList<Float[]> otherlist = new LinkedList<>();
-                for(int i=0; i<=50; i++) otherlist.add(new Float[] {0.5f, 50f, 50f});
-                inputs.put(block_queue, otherlist);
+            for(String key : input_key) {
+                input = receive(key);
+                putHash(key, input);
             }
-            putFloat(setpoint_speed, receive(setpoint_speed));
-            putFloat(power, receive("TrainContollerPower"));
-            if(receive("TrainControllerPower") != null) train.train.POWER = (float) receive("TrainControllerPower");
-            System.out.println(receive("TrainControllerPower"));
-            putInt(pass_count, receive(pass_count));
-            putInt(crew_count, receive(crew_count));
-            putInt(cars, receive(cars));
-            putBool(interior_lights, receive(interior_lights));
-            putBool(exterior_lights, receive(exterior_lights));
-            putBool(left_doors, receive(left_doors));
-            putBool(right_doors, receive(right_doors));
-            putString(beacon, receive(beacon));
 
             //set key outputs
-            outputs = train.refresh(inputs);
-            Iterator outputs_iterator = outputs.entrySet().iterator();
-            while(outputs_iterator.hasNext()) {
-                Map.Entry element = (Map.Entry) outputs_iterator.next();
-                send((String)element.getKey(), element.getValue());
+            for(TrainModelGUI train : trains) {
+                outputs = train.refresh(inputs);
+                Iterator<Map.Entry<String, Object>> outputs_iterator = outputs.entrySet().iterator();
+                while(outputs_iterator.hasNext()) {
+                    Map.Entry element = (Map.Entry) outputs_iterator.next();
+                    send((String)element.getKey(), element.getValue());
+                }
             }
             //wait so screen is visible
             Thread.sleep(500);
@@ -154,5 +135,10 @@ public class TrainModelClient {
     public static void putBool(String key, Object input) {
         if(input != null) inputs.put(key, input);
         else inputs.put(key, true);
+    }
+
+    public static void putHash(String key, Object input) {
+        if(input != null) inputs.put(key, input);
+        else inputs.put(key, new HashMap<>());
     }
 }

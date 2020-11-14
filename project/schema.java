@@ -4,7 +4,8 @@ public class schema {
     public class TrainModel {
         public static final String velocity = "TrainModelVelocity";
         public static final String speed = "TrainModelSpeed";
-        public static final String authority = "TrainModelAuthority";
+        public static final String authority_queue = "TrainModelAuthorityQueue";
+        public static final String block_queue = "TrainModelBlockQueue";
         public static final String emergency_brake = "TrainModelEmergencyBrake";
         public static final String left_door = "TrainModelLeftDoor";
         public static final String right_door = "TrainModelRightDoor";
@@ -44,13 +45,13 @@ public class schema {
         public static final String red_status = "redStatus";
         public static final String green_status = "greenStatus";
         public static final String block = "currentBlock";
-        public static final String cars = "numberOfTrainCars";
-        public static final String block_queue = "TrackModelBlockQueue";
-        public static final String authority_queue = "TrackModelAuthorityQueue";
+        public static final String trains = "TrackModelTrains";
+        public static final String block_queue = "TrackModelgreenTrainControl";
+        public static final String authority_queue = "TrackModelgreenAuthorities";
     }
 
     public class CTCOffice {
-        public static final String signal = "CTCSignal";      
+        public static final String signal = "CTCSignal";     
     }
 
     public static void main(String[] args) {
