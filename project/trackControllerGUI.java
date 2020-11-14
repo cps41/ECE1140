@@ -21,6 +21,7 @@ public class trackControllerGUI extends trackController {
 	private static String[] switchList = {"Right", "Left"};
 	private static String[] crossingList = {"Activate", "Deactivate"};
 	private static ArrayList<java.io.File> PLCs = new ArrayList<java.io.File>();
+	public static PLCInterpreter interpreter;
 	
 	//declare swing elements
 	private static JFrame frame;
@@ -251,7 +252,7 @@ public class trackControllerGUI extends trackController {
 		panel.add(submit);
 		
 		//configure PLC uploader
-		PLCInterpreter interpreter = new PLCInterpreter();
+		interpreter = new PLCInterpreter();
 		noPLC.setBounds(450,850,500,25);
 		noPLC.setForeground(Color.RED);
 		noPLC.setVisible(false);
@@ -289,13 +290,13 @@ public class trackControllerGUI extends trackController {
 		
 		//double check all elements are on panel
 		panel.repaint();
-		
+	}
+	
+	public void run() {
 		//run uploaded PLCS
-		while (true) {
 			System.out.println("Running PLCs");
 			for (int i=0; i<PLCs.size(); i++)
 				interpreter.runPLC(PLCs.get(i));
-		}
 	}
 }
 
