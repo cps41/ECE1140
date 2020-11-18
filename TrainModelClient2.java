@@ -117,25 +117,25 @@ public class TrainModelClient2 {
             return null;
         }
     }
-    public static void putInt(String key, Object input) {
-        if(input != null) inputs.put(key, input);
-        else inputs.put(key, 0);
-    }
+    // public static void putInt(String key, Object input) {
+    //     if(input != null) inputs.put(key, input);
+    //     else inputs.put(key, 0);
+    // }
 
-    public static void putFloat(String key, Object input) {
-        if(input != null) inputs.put(key, input);
-        else inputs.put(key, 0f);
-    }
+    // public static void putFloat(String key, Object input) {
+    //     if(input != null) inputs.put(key, input);
+    //     else inputs.put(key, 0f);
+    // }
 
-    public static void putString(String key, Object input) {
-        if(input != null) inputs.put(key, input);
-        else inputs.put(key, "");
-    }
+    // public static void putString(String key, Object input) {
+    //     if(input != null) inputs.put(key, input);
+    //     else inputs.put(key, "");
+    // }
 
-    public static void putBool(String key, Object input) {
-        if(input != null) inputs.put(key, input);
-        else inputs.put(key, true);
-    }
+    // public static void putBool(String key, Object input) {
+    //     if(input != null) inputs.put(key, input);
+    //     else inputs.put(key, true);
+    // }
 
     public static void putHash(String key, Object input) {
         if(input != null) inputs.put(key, input);

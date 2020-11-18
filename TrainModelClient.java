@@ -17,7 +17,7 @@ public class TrainModelClient {
         Object num_cars = receive(schema.TrackModel.cars);
         if (num_cars == null) num_cars = 3;
 
-        while(train.frame.isShowing()) {     
+        while(true) {     
         //     //receive key inputs
         //     Object power = new Object(), authority = new Object(), brake = new Object(), speed_limit = new Object(), speed = new Object(), 
         //            interior_lights = new Object(), exterior_lights = new Object(), left_doors = new Object(), right_doors = new Object(), 
@@ -29,7 +29,6 @@ public class TrainModelClient {
             String pass_count = schema.TrackModel.pass_count;
             String crew_count = schema.TrackModel.crew_count;
             String beacon = schema.TrackModel.beacon;
-            String cars = schema.TrackModel.cars;
             String power = schema.TrainController.power;
             String interior_lights = schema.TrainController.interior_lights;
             String exterior_lights = schema.TrainController.exterior_lights;
