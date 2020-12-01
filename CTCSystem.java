@@ -64,7 +64,7 @@ public class CTCSystem {
     }
 
     private static void updateSystem(){     
-        Client.update();
+        CTCOfficeClient.update();
         TIME_LABEL.setText(Clock.getDate());
         Clock.update();
 
