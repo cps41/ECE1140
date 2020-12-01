@@ -128,6 +128,7 @@ public class TrainControllerGUI{
             JButton brakeButton = new JButton("BRAKE"); 
             JPanel brakeButtonPanel = new JPanel();
             JLabel brakeButtonLabel = new JLabel();
+            JLabel stopSign = new JLabel(new ImageIcon("C:/Users/catwo/Downloads/redOctagon.png"));
             brakeButtonLabel.setText("Brake Status: OFF");
             // Define ActionListener 
       
@@ -229,6 +230,7 @@ public class TrainControllerGUI{
         brakeButton.setPreferredSize(new Dimension(200, 50));  
         brakeButtonPanel.add(brakeButton);
         brakeButtonPanel.add(brakeButtonLabel);
+        brakeButtonPanel.add(stopSign);
         
  
         //Set the menu bar and add the label to the content pane.
