@@ -26,6 +26,7 @@ public class TrainModelClient {
         base.add(true);
         base.add(true);
         base.add(true);
+        base.add(false);
         
         
         while(true) {

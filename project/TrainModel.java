@@ -15,7 +15,7 @@ public class TrainModel {
     public ArrayList<Car> CARS;
     public boolean INTERIOR_LIGHTS, EXTERIOR_LIGHTS, LEFT_DOORS, RIGHT_DOORS, 
                    LEFT_DOORS_STATION, RIGHT_DOORS_STATION, BRAKES, EBRAKE, 
-                   TENTIMESSPEED, LINE, ARRIVING, AT_STATION;
+                   TENTIMESSPEED, LINE, ARRIVING, AT_STATION, DONE;
 
     public final float EBRAKE_ACC = -2.73f;
     public final float MIN_ACC = -1.2f;

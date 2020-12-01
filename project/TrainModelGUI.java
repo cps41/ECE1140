@@ -6,7 +6,6 @@ import java.awt.event.*;
 import java.util.*;
 
 
-@SuppressWarnings("unchecked")
 public class TrainModelGUI{
 
 	//declare elements
@@ -105,6 +104,11 @@ public class TrainModelGUI{
 			train.INTERIOR_LIGHTS = (boolean) inputs.get(6);
 			train.EXTERIOR_LIGHTS = (boolean) inputs.get(7);
 			train.BRAKES = (boolean) inputs.get(8);
+			train.DONE = (boolean) inputs.get(9);
+		}
+
+		if(train.DONE) {
+			train.PASSENGER_COUNT = 0;
 		}
 
 		train.decodeBeacon();
@@ -139,6 +143,8 @@ public class TrainModelGUI{
 		outputs.add(train.EBRAKE);
 		outputs.add(train.STATION);
 		outputs.add(train.VELOCITY);
+		outputs.add(train.PASSENGER_COUNT);
+		outputs.add(train.DONE);
 		System.out.println("Outputs"+outputs.toString());
 		return outputs;
 	}
