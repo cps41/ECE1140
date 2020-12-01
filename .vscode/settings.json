@@ -1,0 +1,8 @@
+{
+    "java.completion.guessMethodArguments": true,
+    "java.completion.overwrite": false,
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.home": "",
+    "editor.quickSuggestions": true,
+    "editor.suggest.showStatusBar": true
+}
