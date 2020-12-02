@@ -3,6 +3,7 @@ package project;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 import java.util.*;
 
 
@@ -11,26 +12,41 @@ public class TrainModelGUI{
 	//declare elements
 	public int Key;
 	public TrainModel train;
-	public JFrame frame;
-	private JPanel panel;
+	public JPanel frame;
+	public JPanel panel, images;
 	private JLabel Velocity, Power, Brakes, Pass, Crew, Length, Mass, Interior, 
-				   Exterior, LeftDoors, RightDoors, Temperature;
-	private JRadioButton Arriving;
+				   Exterior, LeftDoors, RightDoors, Temperature, Front, Top, Arriving, Timer;
 	private JToggleButton EBrake;
+	private Icon intOff = new ImageIcon("img/intOff.png");
+	private Icon intOn = new ImageIcon(new File("img/intOn.png").getAbsolutePath());
+	private Icon intOffExt = new ImageIcon(new File("img/intOffExt.png").getAbsolutePath());
+	private Icon intOnExt = new ImageIcon(new File("img/intOnExt.png").getAbsolutePath());
+	private Icon none = new ImageIcon(new File("img/none.png").getAbsolutePath());
+	private Icon noneExt = new ImageIcon(new File("img/noneExt.png").getAbsolutePath()); 
+	private Icon left = new ImageIcon(new File("img/left_50.png").getAbsolutePath());
+	private Icon right = new ImageIcon(new File("img/right.png").getAbsolutePath());
+	private Icon both = new ImageIcon(new File("img/both.png").getAbsolutePath());
+	private Icon leftExt = new ImageIcon(new File("img/leftExt.png").getAbsolutePath());
+	private Icon rightExt = new ImageIcon(new File("img/rightExt.png").getAbsolutePath());
+	private Icon bothExt = new ImageIcon(new File("img/bothExt.png").getAbsolutePath());
 	
 	
-	public TrainModelGUI(ArrayList<Object> info, int train_num, int[] rp, int[] gp, String[] red_beacon, String[] green_beacon) throws InterruptedException {
+	public TrainModelGUI(ArrayList<Object> info, int train_num, int[] rp, int[] gp, String[] red_beacon, String[] green_beacon) {
+		System.out.println("Width: "+intOff.getIconWidth());
 		train = new TrainModel(info, train_num, rp, gp, red_beacon, green_beacon);
 		Key = train_num;
 
 		//create elements
-		frame = new JFrame();
+		frame = new JPanel();
 		panel = new JPanel();
+		images = new JPanel();
 		
 		//configure frame
 		frame.setSize(1000, 800);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setTitle("Train Model");
+		GridLayout frame_layout = new GridLayout(1, 2);
+		frame.setLayout(frame_layout);
+		// frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		// frame.setTitle("Train Model");
 		frame.setVisible(true);
 
 		//configure panel
@@ -39,7 +55,19 @@ public class TrainModelGUI{
 		layout.setHgap(5);
 		layout.setVgap(5);
 		panel.setLayout(layout);
-		
+
+		// configure image panel
+		frame.add(images, "Center");
+		GridLayout img_layout = new GridLayout(2, 1);
+		img_layout.setHgap(10);
+		img_layout.setVgap(10);
+		images.setLayout(img_layout);
+		Front = new JLabel(intOff);
+		images.add(Front);
+		Top = new JLabel(none);
+		images.add(Top);
+		// panel.add(images);
+
 		//display key inputs
 		Velocity = new JLabel("Train Velocity: " + train.VELOCITY + "km/h");
 		panel.add(Velocity);
@@ -77,17 +105,18 @@ public class TrainModelGUI{
 		Temperature = new JLabel("Temperature: " + train.TEMPERATURE +"ºF");
 		panel.add(Temperature);
 
-		Arriving = new JRadioButton("Arriving at Station\nTimer: "+train.STATION_TIMER);
-		if(train.ARRIVING) Arriving.setEnabled(true);
-		else Arriving.setEnabled(false);
+		Arriving = new JLabel("Not Arriving at Station");
 		panel.add(Arriving);
+
+		Timer = new JLabel("");
+		panel.add(Timer);
 
 		EBrake = new JToggleButton("Emergency Brake");
 		EBrake.addActionListener(new EBrakeListener());
 		panel.add(EBrake);
 	}
 
-	public ArrayList<Object> refresh(ArrayList<Object> inputs) throws InterruptedException{
+	public ArrayList<Object> refresh(ArrayList<Object> inputs, int time_factor) throws InterruptedException{
 		System.out.println("Refreshing.....");
 
 		ArrayList<Object> outputs; // return value of ebrake, station, and velocity
@@ -105,9 +134,12 @@ public class TrainModelGUI{
 			train.EXTERIOR_LIGHTS = (boolean) inputs.get(7);
 			train.BRAKES = (boolean) inputs.get(8);
 			train.DONE = (boolean) inputs.get(9);
+			train.TIME = time_factor;
 		}
 
 		if(train.DONE) {
+			// frame.dispose();
+			frame.setEnabled(false);
 			train.PASSENGER_COUNT = 0;
 		}
 
@@ -135,8 +167,33 @@ public class TrainModelGUI{
 		RightDoors.setText("Right Doors: " + doorStatus(train.RIGHT_DOORS));
 		Temperature.setText("Temperature: " + train.TEMPERATURE +"ºF");
 
-		if(train.ARRIVING) Arriving.setBackground(Color.green);
-		else Arriving.setBackground(Color.red);
+		if(train.EXTERIOR_LIGHTS) {
+			if(!train.LEFT_DOORS && !train.RIGHT_DOORS) Top.setIcon(bothExt);
+			else if(!train.LEFT_DOORS && train.RIGHT_DOORS) Top.setIcon(leftExt);
+			else if(train.LEFT_DOORS && !train.RIGHT_DOORS) Top.setIcon(rightExt);
+			else Top.setIcon(noneExt);
+
+			if(train.INTERIOR_LIGHTS) Front.setIcon(intOnExt);
+			else Front.setIcon(intOffExt);
+		}
+		else {
+			if(!train.LEFT_DOORS && !train.RIGHT_DOORS) Top.setIcon(both);
+			else if(!train.LEFT_DOORS && train.RIGHT_DOORS) Top.setIcon(left);
+			else if(train.LEFT_DOORS && !train.RIGHT_DOORS) Top.setIcon(right);
+			else Top.setIcon(none);
+			
+			if(train.INTERIOR_LIGHTS) Front.setIcon(intOn);
+			else Front.setIcon(intOff);
+		}
+
+		if(train.ARRIVING) {
+			Arriving.setText("Arriving at "+train.STATION);
+			Timer.setText("Timer: "+train.TIME);
+		}
+		else {
+			Arriving.setText("Not Arriving at Station");
+			Timer.setText("");
+		}
 
 
 		outputs = new ArrayList<>();

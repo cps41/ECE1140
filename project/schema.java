@@ -13,6 +13,8 @@ public class schema {
         public static final String gy = "TrainModelGreenToYard";
         public static final String rp = "TrainModelRedPassCount";
         public static final String gp = "TrainModelGreenPassCount";
+        public static final String rc = "red";
+        public static final String gc = "green";
     }
 
     public class TrainController {
@@ -35,5 +37,7 @@ public class schema {
         public static final String green_pass = "greenPassengerCount";
         public static final String ry = "TrackModelRedToYard";
         public static final String gy = "TrackModelGreenToYard";
+        public static final String rc = "TrackModelAuthorityRedCorrection";
+        public static final String gc = "TrackModelAuthorityGreenCorrection";
     }
 }

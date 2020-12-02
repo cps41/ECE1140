@@ -1,7 +1,11 @@
+
 /* Needed on Client only */
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.*;
+
+import javax.swing.*;
+import java.awt.*;
 import project.*;
 
 public class TrainModelClient {    
@@ -15,18 +19,33 @@ public class TrainModelClient {
     private static HashMap<String, Object> inputs = new HashMap<>();
     private static HashMap<String, Object> outputs = new HashMap<>();
 
+    private static JFrame frame;
+    private static JTabbedPane Tabs;
+    private static int num = 1;
+
     @SuppressWarnings("unchecked")
     public static void main (String[] args) throws InterruptedException {
-        base.add(0f);
-        base.add(true);
-        base.add(true);
-        base.add(70f);
-        base.add(0);
-        base.add(new Float[] {1f,1f,1f});
-        base.add(true);
-        base.add(true);
-        base.add(true);
-        base.add(false);
+        frame = new JFrame();
+		frame.setSize(1000, 800);
+		GridLayout frame_layout = new GridLayout(1, 2);
+		frame.setLayout(frame_layout);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setTitle("Train Model");
+        frame.setVisible(true);
+        
+        Tabs = new JTabbedPane();
+        frame.add(Tabs);
+
+        base.add(0f); // power
+        base.add(true); // left doors
+        base.add(true); // right doors
+        base.add(70f); // temp
+        base.add(0); // block num
+        base.add(new Float[] {1f,1f,1f}); // block info
+        base.add(false); // int lights
+        base.add(false); // ext lights
+        base.add(true); // brake
+        base.add(false); // running
         
         
         while(true) {
@@ -43,8 +62,11 @@ public class TrainModelClient {
             String green_size = schema.TrackModel.green_size;
             String ry = schema.TrainController.ry;
             String gy = schema.TrainController.gy;
+            String time = "TimeFactor";
+            String rc = schema.TrackModel.rc;
+            String gc = schema.TrackModel.gc;
 
-            String[] input_key = {red_pass, green_pass, red_beacon, green_beacon, train_nodes, red_status, green_status, red_size, green_size, ry, gy};
+            String[] input_key = {red_pass, green_pass, red_beacon, green_beacon, train_nodes, red_status, green_status, red_size, green_size, ry, gy, time, rc, gc};
             
             // receive values for all keys
             // check if null
@@ -80,10 +102,12 @@ public class TrainModelClient {
             if(inputs.get(green_pass)!=null) {
                 int[] track_green_pass = (int[]) inputs.get(green_pass);
                 green_passengers = new int[track_green_pass.length];
+                for(int i=0; i<green_passengers.length; i++) green_passengers[i] = 0;
             }
             if(inputs.get(red_pass)!=null) {
                 int[] track_red_pass = (int[]) inputs.get(red_pass);
                 red_passengers = new int[track_red_pass.length];
+                for(int i=0; i<red_passengers.length; i++) red_passengers[i] = 0;
             }
 
             // update trains and set outputs
@@ -100,6 +124,9 @@ public class TrainModelClient {
             if(inputs.get(gy)!=null) outputs.put(schema.TrainModel.gy, inputs.get(gy));
             if(green_passengers!=null) outputs.put(schema.TrainModel.gp, green_passengers);
             if(red_passengers!=null) outputs.put(schema.TrainModel.rp, red_passengers);
+            if(inputs.get(rc)!= null) outputs.put(schema.TrainModel.ry, inputs.get(rc));
+            if(inputs.get(gc)!=null) outputs.put(schema.TrainModel.gy, inputs.get(gc));
+
 
             // send outputs
             Iterator<Map.Entry<String, Object>> outputs_iterator = outputs.entrySet().iterator();
@@ -180,6 +207,7 @@ public class TrainModelClient {
         if(trains.size() > TRAINS.size()) {
             for(int i=trains.size()-1; i>=TRAINS.size(); i--) {
                 TrainModelGUI new_train = new TrainModelGUI(trains.get(i), i, rp, gp, red_beacon, green_beacon);
+                Tabs.addTab("Train "+num++, new_train.frame);
                 TRAINS.add(new_train);
             }
         }
@@ -189,7 +217,11 @@ public class TrainModelClient {
     public static void iterateThroughTrains(ArrayList<ArrayList<Object>> train_info, int[] green_pass, int[] red_pass) throws InterruptedException {
         // update trains and set outputs
         ArrayList<ArrayList<Object>> train_controller_inputs = (ArrayList<ArrayList<Object>>) inputs.get(schema.TrainController.train_nodes);
+        int time_factor = 1;
+        if(inputs.get("TimeFactor")!=null) time_factor = (int) inputs.get("TimeFactor");
+        System.out.println("Time factor: "+time_factor);
         if(train_controller_inputs==null) {
+            System.out.println("No train controller info");
             train_controller_inputs = new ArrayList<>();
             for(int i=0; i<TRAINS.size(); i++) train_controller_inputs.add(base);
         }
@@ -197,7 +229,7 @@ public class TrainModelClient {
         for(int i=0; i<TRAINS.size(); i++) {
             TrainModelGUI current_train = TRAINS.get(i);
             ArrayList<Object> current_input = train_controller_inputs.get(i);
-            ArrayList<Object> train_outputs = current_train.refresh(current_input);
+            ArrayList<Object> train_outputs = current_train.refresh(current_input, time_factor);
             train_info.add(i, train_outputs);
             if(current_train.train.LINE && green_pass!=null) {
                 int index = current_train.train.LAST_STATION;

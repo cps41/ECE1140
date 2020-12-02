@@ -4,7 +4,8 @@ import java.util.*;
 
 
 public class TrainModel {
-    public int KEY, AUTHORITY, CREW_COUNT, CURRENT_BLOCK, STATION_TIMER, PASSENGER_COUNT, LAST_STATION, OFF_COUNT;
+    public int KEY, AUTHORITY, CREW_COUNT, CURRENT_BLOCK, STATION_TIMER, 
+               PASSENGER_COUNT, LAST_STATION, OFF_COUNT, TIME;
     public double VELOCITY; // key output
     public String BEACON, STATION;
     public String[] RED_BEACON_ARRAY, GREEN_BEACON_ARRAY;
@@ -15,7 +16,7 @@ public class TrainModel {
     public ArrayList<Car> CARS;
     public boolean INTERIOR_LIGHTS, EXTERIOR_LIGHTS, LEFT_DOORS, RIGHT_DOORS, 
                    LEFT_DOORS_STATION, RIGHT_DOORS_STATION, BRAKES, EBRAKE, 
-                   TENTIMESSPEED, LINE, ARRIVING, AT_STATION, DONE;
+                   LINE, ARRIVING, AT_STATION, DONE;
 
     public final float EBRAKE_ACC = -2.73f;
     public final float MIN_ACC = -1.2f;
@@ -67,7 +68,7 @@ public class TrainModel {
         }
         BLOCK = new Float[3];
         BLOCK[0] = 1f; BLOCK[1] = 1f; BLOCK[2] = 1f;
-        TENTIMESSPEED = false;
+        TIME = 1;
         AT_STATION = false;
         BEACON = "";
 
@@ -148,8 +149,7 @@ public class TrainModel {
         if(acceleration > MAX_ACC) acceleration = MAX_ACC;
         if(BRAKES) acceleration = MIN_ACC;
         if(EBRAKE) acceleration = EBRAKE_ACC;
-        if(TENTIMESSPEED) VELOCITY = (VELOCITY + (3600)*(ACCELERATION + acceleration));
-        else VELOCITY = (VELOCITY + (3.6)*(ACCELERATION + acceleration));
+        else VELOCITY = (VELOCITY + (3.6)*TIME*(ACCELERATION + acceleration));
         ACCELERATION = acceleration;
         // else {
         //     POWER = 0;
@@ -201,7 +201,7 @@ public class TrainModel {
         // train is at station and must stop for at least 60 seconds
         if(AT_STATION) {
             // train is still waiting at station
-            if(STATION_TIMER < 10) {
+            if(STATION_TIMER < Math.ceil((double) 60/TIME)) {
                 System.out.println("Timer: "+STATION_TIMER);
                 Random rand = new Random();
                 int off_count;
