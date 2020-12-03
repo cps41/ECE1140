@@ -1,0 +1,20 @@
+(# blocks in green track)
+1 (section letter) (block length (m)) (Block grade (%)) (speed limit (km/hr)) (0 = above ground, 1 = underground) (0 = forward, 1 = backward, 2 = both) (arbitrary +- switch #) (crossing) (station name) (0 = left/FILLER, 1 = right, 2 = both)
+2
+3
+.
+.
+.
+.
+ToYard (0 for forward, 1 for backward, 2 for both (wrt line)) (switch #)
+FromYard (0 for forward, 1 for backward, 2 for both (wrt line)) (switch #) or -1 if ToYard is only section and is bi-directional
+(# blocks in red track)
+1 (section letter) (block length (m)) (Block grade (%)) (speed limit (km/hr)) (0 = above ground, 1 = underground) (0 = forward, 1 = backward, 2 = both) (arbitrary +- switch #) (crossing) (station name) (0 = left/FILLER, 1 = right, 2 = both)
+2
+3
+.
+.
+.
+.
+ToYard (0 for forward, 1 for backward, 2 for both (wrt line)) (switch #)
+FromYard (0 for forward, 1 for backward, 2 for both (wrt line)) (switch #) or -1 if ToYard is only section and is bi-directional
