@@ -16,8 +16,8 @@ public class TrainModelClient {
     private static ArrayList<Object> base = new ArrayList<>();
 
     private static ArrayList<TrainModelGUI> TRAINS = new ArrayList<>();
-    private static HashMap<String, Object> inputs = new HashMap<>();
-    private static HashMap<String, Object> outputs = new HashMap<>();
+    private static HashMap<String, Object> inputs;
+    private static HashMap<String, Object> outputs;
 
     private static JFrame frame;
     private static JTabbedPane Tabs;
@@ -49,7 +49,9 @@ public class TrainModelClient {
         
         
         while(true) {
-            ArrayList<ArrayList<Object>> train_info = new ArrayList<>();
+            inputs = new HashMap<>();
+            outputs = new HashMap<>();
+            ArrayList<ArrayList<Object>> train_info = null;
             String trains = schema.TrackModel.trains;
             String red_pass = schema.TrackModel.red_pass;
             String green_pass = schema.TrackModel.green_pass;
@@ -80,6 +82,8 @@ public class TrainModelClient {
                 String[] rb = (String[]) receive(red_beacon);
                 String[] gb = (String[]) receive(green_beacon);
                 if (trains_obj!=null && rp!=null && gp!=null && rb!=null && gb!=null) {
+                    for(int i=0; i<200; i++) System.out.println("gp["+i+"]"+gp[i]);
+                    for(int i=0; i<200; i++) System.out.println("rp["+i+"]"+rp[i]);
                     checkForNewTrains(trains_obj, rp, gp, rb, gb);
                     inputs.put(trains, trains_obj);
                     inputs.put(red_beacon, rb);
@@ -87,7 +91,17 @@ public class TrainModelClient {
                     break;
                 }
                 else {
-                    iterateThroughTrains(train_info, gp, rp);
+                    Integer[] red_p = new Integer[200], green_p = new Integer[200];
+                    for(int i=0; i<200; i++) {
+                        red_p[i] = 0;
+                        green_p[i] = 0;
+                    }
+                    boolean[] green_station_array = new boolean[200], red_station_array = new boolean[200];
+                    for(int i=0; i<green_station_array.length; i++) {
+                        green_station_array[i] = false;
+                        red_station_array[i] = false;
+                    }
+                    train_info = iterateThroughTrains(green_p, red_p, gp, rp, green_station_array, red_station_array);
                     if(train_info != null) outputs.put(schema.TrainModel.train_info, train_info);
                 }
             }
@@ -98,21 +112,26 @@ public class TrainModelClient {
                 putObj(key, input);
             }
 
-            int[] green_passengers = null, red_passengers = null;
+            Integer[] green_passengers = null, red_passengers = null;
             if(inputs.get(green_pass)!=null) {
                 int[] track_green_pass = (int[]) inputs.get(green_pass);
-                green_passengers = new int[track_green_pass.length];
+                green_passengers = new Integer[track_green_pass.length];
                 for(int i=0; i<green_passengers.length; i++) green_passengers[i] = 0;
             }
             if(inputs.get(red_pass)!=null) {
                 int[] track_red_pass = (int[]) inputs.get(red_pass);
-                red_passengers = new int[track_red_pass.length];
+                red_passengers = new Integer[track_red_pass.length];
                 for(int i=0; i<red_passengers.length; i++) red_passengers[i] = 0;
             }
 
+            boolean[] green_station_array = new boolean[green_passengers.length], red_station_array = new boolean[green_passengers.length];
+            for(int i=0; i<green_station_array.length; i++) {
+                green_station_array[i] = false;
+                red_station_array[i] = false;
+            }
+
             // update trains and set outputs
-            iterateThroughTrains(train_info, green_passengers, red_passengers);
-            System.out.println(train_info.toString());
+            train_info = iterateThroughTrains(green_passengers, red_passengers, (int[]) inputs.get(green_pass), (int[]) inputs.get(red_pass), green_station_array, red_station_array);
 
             outputs.put(schema.TrainModel.trains, inputs.get(trains));
             if(train_info != null) outputs.put(schema.TrainModel.train_info, train_info);
@@ -126,6 +145,8 @@ public class TrainModelClient {
             if(red_passengers!=null) outputs.put(schema.TrainModel.rp, red_passengers);
             if(inputs.get(rc)!= null) outputs.put(schema.TrainModel.ry, inputs.get(rc));
             if(inputs.get(gc)!=null) outputs.put(schema.TrainModel.gy, inputs.get(gc));
+            if(green_station_array!=null) outputs.put(schema.TrainModel.sag, green_station_array);
+            if(red_station_array!=null) outputs.put(schema.TrainModel.sar, red_station_array);
 
 
             // send outputs
@@ -214,9 +235,10 @@ public class TrainModelClient {
     }
 
     @SuppressWarnings("unchecked")
-    public static void iterateThroughTrains(ArrayList<ArrayList<Object>> train_info, int[] green_pass, int[] red_pass) throws InterruptedException {
+    public static ArrayList<ArrayList<Object>> iterateThroughTrains(Integer[] green_pass, Integer[] red_pass, int[] gp, int[] rp, boolean[] sag, boolean[] sar) throws InterruptedException {
         // update trains and set outputs
         ArrayList<ArrayList<Object>> train_controller_inputs = (ArrayList<ArrayList<Object>>) inputs.get(schema.TrainController.train_nodes);
+        System.out.println(train_controller_inputs);
         int time_factor = 1;
         if(inputs.get("TimeFactor")!=null) time_factor = (int) inputs.get("TimeFactor");
         System.out.println("Time factor: "+time_factor);
@@ -225,12 +247,16 @@ public class TrainModelClient {
             train_controller_inputs = new ArrayList<>();
             for(int i=0; i<TRAINS.size(); i++) train_controller_inputs.add(base);
         }
-
+        
+        System.out.println(train_controller_inputs);
+        ArrayList<ArrayList<Object>> train_info = new ArrayList<ArrayList<Object>>();
         for(int i=0; i<TRAINS.size(); i++) {
             TrainModelGUI current_train = TRAINS.get(i);
-            ArrayList<Object> current_input = train_controller_inputs.get(i);
-            ArrayList<Object> train_outputs = current_train.refresh(current_input, time_factor);
-            train_info.add(i, train_outputs);
+            ArrayList<Object> current_input;
+            if(train_controller_inputs.size() <= i) current_input = base;
+            else current_input = train_controller_inputs.get(i);
+            ArrayList<Object> train_outputs = current_train.refresh(current_input, time_factor, gp, rp);
+            train_info.add(train_outputs);
             if(current_train.train.LINE && green_pass!=null) {
                 int index = current_train.train.LAST_STATION;
                 green_pass[index] = current_train.train.OFF_COUNT;
@@ -239,6 +265,11 @@ public class TrainModelClient {
                 int index = current_train.train.LAST_STATION;
                 red_pass[index] = current_train.train.OFF_COUNT;
             }
+
+            if(current_train.train.LINE) sag[current_train.train.CURRENT_BLOCK] = current_train.train.ARRIVING;
+            else sar[current_train.train.CURRENT_BLOCK] = current_train.train.ARRIVING;
+
         }
+        return train_info;
     }
 }

@@ -116,7 +116,7 @@ public class TrainModelGUI{
 		panel.add(EBrake);
 	}
 
-	public ArrayList<Object> refresh(ArrayList<Object> inputs, int time_factor) throws InterruptedException{
+	public ArrayList<Object> refresh(ArrayList<Object> inputs, int time_factor, int[] gp, int[] rp) throws InterruptedException{
 		System.out.println("Refreshing.....");
 
 		ArrayList<Object> outputs; // return value of ebrake, station, and velocity
@@ -137,6 +137,13 @@ public class TrainModelGUI{
 			train.TIME = time_factor;
 		}
 
+		if(train.LINE) {
+			if(gp!=null) train.PASSENGERS_ARRAY = gp;
+		}
+		else {
+			if(rp!=null) train.PASSENGERS_ARRAY = rp;
+		}
+
 		if(train.DONE) {
 			// frame.dispose();
 			frame.setEnabled(false);
@@ -153,10 +160,10 @@ public class TrainModelGUI{
 		
 		//display key inputs
 		String v = String.format("%.3f", train.VELOCITY);
-		Velocity.setText("Train Velocity: " + v + "km/h");
+		Velocity.setText("Velocity: " + v + "km/h");
 		String p = String.format("%.3f", train.POWER);
-		Power.setText(("Train Power Input: " + p + " kW"));
-		Brakes.setText("Train Brake Status: " + otherStatus(train.BRAKES));
+		Power.setText(("Power Input: " + p + " kW"));
+		Brakes.setText("Brake Status: " + otherStatus(train.BRAKES));
 		Pass.setText("Passengers: " + train.PASSENGER_COUNT);
 		Crew.setText("Crew Count: " + train.CREW_COUNT);
 		Length.setText("Length: " + train.LENGTH + "m");
@@ -188,7 +195,7 @@ public class TrainModelGUI{
 
 		if(train.ARRIVING) {
 			Arriving.setText("Arriving at "+train.STATION);
-			Timer.setText("Timer: "+train.TIME);
+			Timer.setText("Timer: "+train.STATION_TIMER);
 		}
 		else {
 			Arriving.setText("Not Arriving at Station");
@@ -202,6 +209,10 @@ public class TrainModelGUI{
 		outputs.add(train.VELOCITY);
 		outputs.add(train.PASSENGER_COUNT);
 		outputs.add(train.DONE);
+		outputs.add(train.BRAKES);
+		outputs.add(train.LEFT_DOORS_STATION);
+		outputs.add(train.RIGHT_DOORS_STATION);
+		outputs.add(train.LINE);
 		System.out.println("Outputs"+outputs.toString());
 		return outputs;
 	}

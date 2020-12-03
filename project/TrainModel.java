@@ -5,7 +5,7 @@ import java.util.*;
 
 public class TrainModel {
     public int KEY, AUTHORITY, CREW_COUNT, CURRENT_BLOCK, STATION_TIMER, 
-               PASSENGER_COUNT, LAST_STATION, OFF_COUNT, TIME;
+               PASSENGER_COUNT, LAST_STATION, OFF_COUNT, TIME, DESTINATION;
     public double VELOCITY; // key output
     public String BEACON, STATION;
     public String[] RED_BEACON_ARRAY, GREEN_BEACON_ARRAY;
@@ -16,7 +16,7 @@ public class TrainModel {
     public ArrayList<Car> CARS;
     public boolean INTERIOR_LIGHTS, EXTERIOR_LIGHTS, LEFT_DOORS, RIGHT_DOORS, 
                    LEFT_DOORS_STATION, RIGHT_DOORS_STATION, BRAKES, EBRAKE, 
-                   LINE, ARRIVING, AT_STATION, DONE;
+                   LINE, ARRIVING, AT_STATION, DONE, REACHED_DESTINATION;
 
     public final float EBRAKE_ACC = -2.73f;
     public final float MIN_ACC = -1.2f;
@@ -71,7 +71,8 @@ public class TrainModel {
         TIME = 1;
         AT_STATION = false;
         BEACON = "";
-
+        DESTINATION = (int) info.get(7);
+        REACHED_DESTINATION = false;
     }
 
     public void decodeBeacon() {
@@ -135,33 +136,21 @@ public class TrainModel {
         double gravity = GRAVITATIONAL_FORCE*Math.sin(angle);
         double force;
         double v = VELOCITY/3.6; // convert km/h to m/s
-        System.out.println(VELOCITY);
 
         if(POWER < 0 || EBRAKE || BRAKES) POWER = 0;
         double p = POWER*1000; // convert kW to W
         if(VELOCITY == 0) force = MASS*MAX_ACC-gravity;
         else force = p/v;
-        System.out.println(gravity);
 
         double acceleration = (force/MASS);
-        System.out.println(POWER + ", " + v + ", " +force + ", " + MASS + ", " + acceleration);
         if(acceleration == 0) acceleration = MIN_ACC;
         if(acceleration > MAX_ACC) acceleration = MAX_ACC;
         if(BRAKES) acceleration = MIN_ACC;
         if(EBRAKE) acceleration = EBRAKE_ACC;
         else VELOCITY = (VELOCITY + (3.6)*TIME*(ACCELERATION + acceleration));
         ACCELERATION = acceleration;
-        // else {
-        //     POWER = 0;
-        //     float acceleration;
-        //     if(EBRAKE) acceleration = EBRAKE_ACC;
-        //     else acceleration = MIN_ACC;
-        //     System.out.println(acceleration);
-        //     if(TENTIMESSPEED) VELOCITY = (VELOCITY + (.025/2)*(ACCELERATION + acceleration))*3.6;
-        //     else VELOCITY = (VELOCITY + (0.25f/2)*(ACCELERATION + acceleration))*3.6;
-        //     ACCELERATION = acceleration;
-        // }
         if (VELOCITY>70f) VELOCITY = 70f;
+        if(VELOCITY>BLOCK[1]) VELOCITY = BLOCK[1];
         if (VELOCITY<0f) VELOCITY = 0f;
         System.out.println("Velocity: "+VELOCITY+", Acceleration: "+ACCELERATION);
     }
@@ -184,7 +173,24 @@ public class TrainModel {
             if(VELOCITY != 0f) { // train is not stopped yet
                 setVelocity();
             }
-            else AT_STATION = true; // train is stopped we are at the station and initiate stationArrival
+            else {
+                if(LINE && CURRENT_BLOCK == 56) {
+                    OFF_COUNT += PASSENGER_COUNT;
+                    PASSENGER_COUNT = 0;
+                }
+                else if(CURRENT_BLOCK == 7) {
+                    OFF_COUNT += PASSENGER_COUNT;
+                    PASSENGER_COUNT = 0;
+                }
+                AT_STATION = true; // train is stopped we are at the station and initiate stationArrival
+                Random rand = new Random();
+                int off_count;
+                if(PASSENGER_COUNT>0) off_count = rand.nextInt(PASSENGER_COUNT);
+                else off_count = 0;
+                PASSENGER_COUNT -= off_count; // passengers get off train
+                OFF_COUNT += off_count;
+                System.out.println(PASSENGER_COUNT);
+            }
         }
     }
 
@@ -203,18 +209,13 @@ public class TrainModel {
             // train is still waiting at station
             if(STATION_TIMER < Math.ceil((double) 60/TIME)) {
                 System.out.println("Timer: "+STATION_TIMER);
-                Random rand = new Random();
-                int off_count;
-                if(PASSENGER_COUNT>0) off_count = rand.nextInt(PASSENGER_COUNT);
-                else off_count = 0;
-                PASSENGER_COUNT -= off_count; // passengers get off train
-                OFF_COUNT += off_count;
                 updateMass();
                 STATION_TIMER++;
             }
             // train is ready to leave station
             else {
                 PASSENGER_COUNT += PASSENGERS_ARRAY[CURRENT_BLOCK]; // all passengers at station get on
+                System.out.println(PASSENGERS_ARRAY[CURRENT_BLOCK]);
                 updateMass();
                 // reset values for station arrival sequence
                 ARRIVING = false;
@@ -225,6 +226,7 @@ public class TrainModel {
                 RIGHT_DOORS = true;
 
                 OFF_COUNT = 0;
+                if(CURRENT_BLOCK == DESTINATION) REACHED_DESTINATION = true;
                 System.out.println("LEAVING");
             }
         }

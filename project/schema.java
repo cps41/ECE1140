@@ -15,6 +15,8 @@ public class schema {
         public static final String gp = "TrainModelGreenPassCount";
         public static final String rc = "red";
         public static final String gc = "green";
+        public static final String sag = "StationArrayGreen";
+        public static final String sar = "StationArrayRed";
     }
 
     public class TrainController {
