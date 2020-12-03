@@ -1,0 +1,154 @@
+Line	Section	Block Number	Infrastructure	Train 1 Arrival Time at Station	Train 2 Arrival Time at Station	Train 3 Arrival Time at Station	Train 4 Arrival Time at Station	Train 5 Arrival Time at Station	Train 6 Arrival Time at Station	Train 7 Arrival Time at Station	Train 8 Arrival Time at Station	Train 9 Arrival Time at Station	Train 10 Arrival Time at Station		0:30
+Green	A	1		0:00	0:30	1:00	1:30	2:00	2:30	3:00	3:30	4:00	4:30		
+Green	A	2	STATION; PIONEER	0:01	0:31	1:01	1:31	2:01	2:31	3:01	3:31	4:01	4:31		
+Green	A	3													
+Green	B	4													
+Green	B	5													
+Green	B	6													
+Green	C	7													
+Green	C	8													
+Green	C	9	STATION; EDGEBROOK	0:04	0:34	1:04	1:34	2:04	2:34	3:04	3:34	4:04	4:34		
+Green	C	10													
+Green	C	11													
+Green	C	12	SWITCH												
+Green	D	13													
+Green	D	14													
+Green	D	15													
+Green	D	16	STATION	0:08	0:38	1:08	1:38	2:08	2:38	3:08	3:38	4:08	4:38		
+Green	E	17													
+Green	E	18													
+Green	E	19													
+Green	E	20													
+Green	F	21													
+Green	F	22	STATION; WHITED	0:12	0:42	1:12	1:42	2:12	2:42	3:12	3:42	4:12	4:42		
+Green	F	23													
+Green	F	24													
+Green	F	25													
+Green	F	26													
+Green	F	27													
+Green	F	28													
+Green	G	29	SWITCH												
+Green	G	30													
+Green	G	31	STATION; SOUTH BANK	0:16	0:46	1:16	1:46	2:16	2:46	3:16	3:46	4:16	4:46		
+Green	G	32													
+Green	H	33													
+Green	H	34													
+Green	H	35													
+Green	I	36	UNDERGROUND												
+Green	I	37	UNDERGROUND												
+Green	I	38	UNDERGROUND												
+Green	I	39	STATION; CENTRAL; UNDERDROUND	0:19	0:49	1:19	1:49	2:19	2:49	3:19	3:49	4:19	4:49		
+Green	I	40	UNDERGROUND												
+Green	I	41	UNDERGROUND												
+Green	I	42	UNDERGROUND												
+Green	I	43	UNDERGROUND												
+Green	I	44	UNDERGROUND												
+Green	I	45	UNDERGROUND												
+Green	I	46	UNDERGROUND												
+Green	I	47	UNDERGROUND												
+Green	I	48	STATION; INGLEWOOD; UNDERGROUND	0:21	0:51	1:21	1:51	2:21	2:51	3:21	3:51	4:21	4:51		
+Green	I	49	UNDERGROUND												
+Green	I	50	UNDERGROUND												
+Green	I	51	UNDERGROUND												
+Green	I	52	UNDERGROUND												
+Green	I	53	UNDERGROUND												
+Green	I	54	UNDERGROUND												
+Green	I	55	UNDERGROUND												
+Green	I	56	UNDERGROUND												
+Green	I	57	STATION; OVERBROOK; UNDERGROUND	0:24	0:54	1:24	1:54	2:24	2:54	3:24	3:54	4:24	4:54		
+Green	J	58	SWITCH TO YARD												
+Green	J	59													
+Green	J	60													
+Green	J	61													
+Green	J	62	SWITCH FROM YARD												
+Green	K	63													
+Green	K	64													
+Green	K	65	STATION; GLENBURY	0:27	0:57	1:27	1:57	2:27	2:57	3:27	3:57	4:27	4:57		
+Green	K	66													
+Green	K	67													
+Green	K	68													
+Green	L	69													
+Green	L	70													
+Green	L	71													
+Green	L	72													
+Green	L	73	STATION; DORMONT	0:31	1:01	1:31	2:01	2:31	3:01	3:31	4:01	4:31	5:01		
+Green	M	74													
+Green	M	75													
+Green	M	76	SWITCH												
+Green	N	77	STATION;         MT LEBANON	0:34	1:04	1:34	2:04	2:34	3:04	3:34	4:04	4:34	5:04		
+Green	N	78													
+Green	N	79													
+Green	N	80													
+Green	N	81													
+Green	N	82													
+Green	N	83													
+Green	N	84													
+Green	N	85													
+Green	O	86	SWITCH												
+Green	O	87													
+Green	O	88	STATION; POPLAR	0:41	1:11	1:41	2:11	2:41	3:11	3:41	4:11	4:41	5:11		
+Green	P	89													
+Green	P	90													
+Green	P	91													
+Green	P	92													
+Green	P	93													
+Green	P	94													
+Green	P	95													
+Green	P	96	STATION;   CASTLE SHANNON	0:44	1:14	1:44	2:14	2:44	3:14	3:44	4:14	4:44	5:14		
+Green	P	97													
+Green	Q	98													
+Green	Q	99													
+Green	Q	100													
+Green	R	101													
+Green	S	102													
+Green	S	103													
+Green	S	104													
+Green	T	105	STATION; DORMONT	0:48	1:18	1:48	2:18	2:48	3:18	3:48	4:18	4:48	5:18		
+Green	T	106													
+Green	T	107													
+Green	T	108													
+Green	T	109													
+Green	U	110													
+Green	U	111													
+Green	U	112													
+Green	U	113		0:51	1:21	1:51	2:21	2:51	3:21	3:51	4:21	4:51	5:21		
+Green	U	114	STATION; GLENBURY												
+Green	U	115													
+Green	U	116													
+Green	V	117													
+Green	V	118													
+Green	V	119													
+Green	V	120													
+Green	V	121													
+Green	W	122	UNDERGROUND												
+Green	W	123	STATION; OVERBROOK; UNDERGROUND	0:54	1:24	1:54	2:24	2:54	3:24	3:54	4:24	4:54	5:24		
+Green	W	124	UNDERGROUND												
+Green	W	125	UNDERGROUND												
+Green	W	126	UNDERGROUND												
+Green	W	127	UNDERGROUND												
+Green	W	128	UNDERGROUND												
+Green	W	129	UNDERGROUND												
+Green	W	130	UNDERGROUND												
+Green	W	131	UNDERGROUND												
+Green	W	132	STATION; INGLEWOOD; UNDERGROUND	0:57	1:27	1:57	2:27	2:57	3:27	3:57	4:27	4:57	5:27		
+Green	W	133	UNDERGROUND												
+Green	W	134	UNDERGROUND												
+Green	W	135	UNDERGROUND												
+Green	W	136	UNDERGROUND												
+Green	W	137	UNDERGROUND												
+Green	W	138	UNDERGROUND												
+Green	W	139	UNDERGROUND												
+Green	W	140	UNDERGROUND												
+Green	W	141	STATION; CENTRAL; UNDERDROUND	1:30	2:00	2:30	3:00	3:30	4:00	4:30	5:00	5:30	6:00		
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
