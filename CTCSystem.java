@@ -45,7 +45,7 @@ public class CTCSystem {
         if (!LOCAL_MODE){
             MODE_LABEL.setText("Server Mode:");
             TIME_LABEL.setText("waiting for server");
-            Client.configure();}
+            ClientCTC.configure();}
          else{
             MODE_LABEL.setText("Local Mode:");
             Test.configure();}
@@ -98,7 +98,7 @@ public class CTCSystem {
     }
     private static void updateSystem(){     
         if (!LOCAL_MODE)
-            Client.update();
+            ClientCTC.update();
         else
             Test.update();
         TIME_LABEL.setText(Clock.getDate());

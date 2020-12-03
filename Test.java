@@ -1,228 +1,125 @@
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-
 public class Test {
-    private static final int PORTNUMBER = 0;
-    private static final String cpuIP = "18.216.251.172";
-    private static ServerInterface mini;
-    private static boolean connected = false;
-    
-    public Test() //send inputs to this Track Model and display corresponding outputs
-    {
-    	//not all tests currently added, this revision shows one of many test sets
-    	//simulating all inputs and output
-    	System.out.println("====================");
-    	System.out.println("=====Just a test====");
-    	System.out.println("====================");
-    	while(true) //continue forever so client can also run forever
-    	{
-    		////CHANGE ALL OUTBOUND VALUES HERE////
-    		//initialize -> send -> receive -> test
-    		
-    		System.out.print("Upload Config. File: ");
-    		if(Client.greenSections != null && Client.greenStation != null)
-    			System.out.println("Pass");
-    		else
-    			System.out.println("Fail");
-    			
-    		////////////////////////////////////////
-    
-    		boolean TrackControllerGreenToYard = true; //testing non defaulting values
-    		boolean TrackControllerRedToYard = true;
-    		
-    		send("TrackControllerGreenToYard", TrackControllerGreenToYard);
-    		send("TrackControllerRedToYard", TrackControllerRedToYard);
-    		
-    		boolean TrackModelGreenToYard = false;
-    		boolean TrackModelRedToYard = false;
-    		if(receive("TrackModelGreenToYard") != null)
-    		{
-    			TrackModelGreenToYard = (boolean)receive("TrackModelGreenToYard");
-        		TrackModelRedToYard = (boolean)receive("TrackModelRedToYard");
-    		}
-    		
-    		System.out.print("Green To Yard Pass Through: ");
-    		if(TrackModelGreenToYard == TrackControllerGreenToYard)
-    			System.out.println("Pass");
-    		else
-    			System.out.println("Fail");
-    		System.out.print("Red To Yard Pass Through: ");
-    		if(TrackModelRedToYard == TrackControllerRedToYard)
-    			System.out.println("Pass");
-    		else
-    			System.out.println("Fail");
-    		
-    		///////////////////////////////////////////
-    		
-    		Boolean[] greenPosition = new Boolean[200];
-    		for(int i = 0; i < 200; i++)
-    		{
-    			if(Client.greenStation[i].length() > 1)
-    				greenPosition[i] = true;
-    		}
-    		
-    		Boolean[] redPosition = new Boolean[200];
-    		for(int i = 0; i < 200; i++)
-    		{
-    			if(Client.redStation[i].length() > 1)
-    				redPosition[i] = true;
-    		}
-    		
-    		send("greenPosition", greenPosition);
-    		send("redPosition", redPosition);
-    		
-    		Boolean[] greenPosition2 = Client.greenSwitchPosition;
-    		Boolean[] redPosition2 = Client.redSwitchPosition;
-    		
-    		boolean gflag = true;
-    		boolean rflag = true;
-    		for(int i = 0; i < 200; i++)
-    		{
-    			if(greenPosition[i] != greenPosition2[i])
-    				gflag = false;
-    			if(redPosition[i] != redPosition2[i])
-    				rflag = false;
-    		}
-    		
-    		System.out.print("Green Switch Position In: ");
-    		if(gflag = true)
-    			System.out.println("Pass");
-    		else
-    			System.out.println("Fail");
-    		System.out.print("Red Switch Position In: ");
-    		if(rflag = true)
-    			System.out.println("Pass");
-    		else
-    			System.out.println("Fail");
-    		
-    		////////////////////////////////////////////////
-    		
-    		Boolean[] TrainModelGreenStatus = new Boolean[200];
-    		Boolean[] TrainModelRedStatus = new Boolean[200];
-    		
-    		TrainModelGreenStatus[43] = true;
-    		TrainModelRedStatus[57] = true;
-    		
-    		send("TrainModelGreenStatus", TrainModelGreenStatus);
-    		send("TrainModelRedStatus", TrainModelRedStatus);
-    		
-    		Boolean[][] greenStatus = (Boolean[][])receive("greenStatus");
-    		Boolean[][] redStatus = (Boolean[][])receive("redStatus");
-    		
-    		gflag = true;
-    		rflag = true;
-    		for(int i = 0; i < 200; i++)
-    		{
-    			if(greenStatus[i][0] != TrainModelGreenStatus[i])
-    				gflag = false;
-    			if(redStatus[i][0] != TrainModelRedStatus[i])
-    				rflag = false;
-    		}
-    		
-    		System.out.print("Green Presence Through: ");
-    		if(gflag = true)
-    			System.out.println("Pass");
-    		else
-    			System.out.println("Fail");
-    		System.out.print("Red Presence Through: ");
-    		if(rflag = true)
-    			System.out.println("Pass");
-    		else
-    			System.out.println("Fail");
-    		
-    		//////////////////////////////////////////////
-    		
-    		
-    	}
-    	
+    public static void update(){
+        CTCSystem.RED_MODEL.passengerCount  = 5;
+        CTCSystem.GREEN_MODEL.passengerCount  = 5;
+
+    }
+    public static void configure(){
+        //create a small track, with one destination and two switches, one section
+        int intArray[][] = {
+            {0,0,-1,0},//
+            {-2,0,2,25},//1
+            {0,0,2,25},//2
+            {0,0,2,25},//3
+            {0,0,2,25},//4
+            {1,0,2,25},//5
+            {-1,0,2,25},//6
+            {0,0,2,25},//7
+            {0,0,2,25},//8
+            {-2,0,2,25},//9
+            {2,0,2,25},//10
+            {0,0,2,25},//11
+            {0,0,2,25},//12
+            {3,0,2,25},//13
+            {-3,0,2,25},//14
+            {0,0,2,25},//15
+            {0,0,2,25},//16
+            {-3,0,2,25},//17
+            {-1,0,2,25},//18
+        };
+        float floatArray[][] = {
+            {-1,-1},
+            {100,0},//1
+            {100,0},//2
+            {100,0},//3
+            {100,0},//4
+            {100,0},//5
+            {100,0},//6
+            {100,0},//7
+            {100,0},//8
+            {100,0},//9
+            {100,0},//10
+            {100,0},//11
+            {100,0},//12
+            {100,0},//13
+            {100,0},//14
+            {100,0},//15
+            {100,0},//16
+            {100,0},//17
+            {0,0},//18
+        };
+        String stringArray[][] = {
+            {"-1","-1"},
+            {"A","0"},//1
+            {"A","0"},//2
+            {"A","STATION_A"},//3
+            {"A","0"},//4
+            {"A","0"},//5
+            {"A","0"},//6
+            {"A","0"},//7
+            {"A","0"},//8
+            {"A","0"},//9
+            {"A","0"},//10
+            {"A","0"},//11
+            {"A","STATION_B"},//12
+            {"A","0"},//13
+            {"A","0"},//14
+            {"A","0"},//15
+            {"A","0"},//16
+            {"A","0"},//17
+            {"A","0"},//18
+        }; 
+        int SIZE = 17;
+        CTCSystem.GREEN_MODEL.configurationInt = intArray;
+        CTCSystem.RED_MODEL.configurationInt = intArray;
+        CTCSystem.GREEN_MODEL.configurationFloat = floatArray;
+        CTCSystem.RED_MODEL.configurationFloat = floatArray;
+        CTCSystem.GREEN_MODEL.configurationString = stringArray;
+        CTCSystem.RED_MODEL.configurationString = stringArray;
+        CTCSystem.GREEN_MODEL.SIZE = SIZE;
+        CTCSystem.RED_MODEL.SIZE = SIZE;
+        /*
+        Block[] BLOCKS = new Block[13];
+        for (int i=1;i<=12;i++)
+            BLOCKS[i] = new Block(i);
+
+        for (int i=2;i<=9;i++){
+            BLOCKS[i].CONNECTS[0] = BLOCKS[i-1];
+            BLOCKS[i].CONNECTS[1] = BLOCKS[i+1];
+        }
+        BLOCKS[1].CONNECTS[0] = BLOCKS[10];
+        BLOCKS[1].CONNECTS[1] = BLOCKS[2];
+        BLOCKS[11].CONNECTS[0] = BLOCKS[9];
+        BLOCKS[12].CONNECTS[0] = BLOCKS[2];
+        BLOCKS[10].CONNECTS[0] = BLOCKS[9];
+        BLOCKS[10].CONNECTS[1] = BLOCKS[1];
+
+        BLOCKS[2].CONNECTS[2] = BLOCKS[12];
+        BLOCKS[2].SWITCH  = 1;
+        BLOCKS[1].SWITCH  = -1;
+        BLOCKS[12].SWITCH  = -1;
+
+        BLOCKS[9].CONNECTS[2] = BLOCKS[11];
+        BLOCKS[9].SWITCH  = 2;
+        BLOCKS[11].SWITCH  = -2;
+        BLOCKS[10].SWITCH  = -2;
+
+        for (int i=1;i<=12;i++){
+            BLOCKS[i].CROSSING = 0;
+            BLOCKS[i].LIMIT = 50;
+            BLOCKS[i].LENGTH = 100;
+            BLOCKS[i].GRADE = 0;
+            BLOCKS[i].SECTION = "A";
+            BLOCKS[i].DESTINATION = "0";
+            BLOCKS[i].DIRECTION = 0;
+        }
+        BLOCKS[6].DESTINATION = "DESTINATION";
+        BLOCKS[11].DIRECTION = 0;
+        BLOCKS[12].DIRECTION = 1;
+        CTCSystem.RED_MODEL.BLOCKS = BLOCKS;
+        CTCSystem.GREEN_MODEL.BLOCKS = BLOCKS;
+        CTCSystem.RED_MODEL.SIZE = 10;
+        CTCSystem.GREEN_MODEL.SIZE = 10;*/
     }
     
-    
-    static boolean send(String key, Object value) 
-    {
-        if (!connected) 
-        {            
-        	connectClient();
-        }
-        try 
-        {
-            mini.serverSend(key, value);
-            return true;
-        } 
-        catch (Exception e) 
-        {
-            System.out.printf("Failed to set %s to %s\n", key, value);
-            return false;
-        }
-    }
-    
-    static Object receive(String key) 
-    {
-        if (!connected) 
-        {
-            connectClient();
-        }
-        try 
-        {
-            return mini.serverReceive(key);
-        } 
-        catch (Exception e) 
-        {
-            System.out.printf("Failed to receive %s\n", key);
-        }
-        return null;
-    }
-    
-    private static void connectClient() 
-    {
-        if (!connected) 
-        {
-            try
-            {
-                Registry registry = LocateRegistry.getRegistry(cpuIP, PORTNUMBER);
-                mini = (ServerInterface) registry.lookup("ServerInterface");
-                connected = true;
-            } 
-            catch (Exception e) 
-            {
-                System.err.println("Client exception: " + e.toString());
-                e.printStackTrace();
-            }
-        }
-    }
-    
-    static void call(String key, Object...argv) 
-    {
-        if (!connected) 
-        {
-            connectClient();
-        }
-        try 
-        {
-            mini.serverCall(key, argv);
-        } 
-        catch (Exception e) 
-        {
-            System.err.println("Client exception: " + e.toString());
-            e.printStackTrace();
-        }
-    }
-    
-    static Object[] getCall(String key) 
-    {
-        if (!connected) 
-        {
-            connectClient();
-        }
-        try 
-        {
-            return mini.serverGetCall(key);
-        } 
-        catch (Exception e) 
-        {
-            System.err.println("Client exception: " + e.toString());
-            e.printStackTrace();
-            return null;
-        }
-    }
 }
