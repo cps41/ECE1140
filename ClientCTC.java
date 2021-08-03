@@ -5,7 +5,7 @@ import java.util.*;
 
 public class ClientCTC {
     private static final int PORTNUMBER = 0;
-    private static final String cpuIP = "18.216.251.172";
+    private static final String cpuIP = "18.219.117.25";
     private static ServerInterface mini;
     private static boolean connected = false;
 
